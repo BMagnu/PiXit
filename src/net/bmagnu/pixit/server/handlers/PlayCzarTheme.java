@@ -3,6 +3,7 @@ package net.bmagnu.pixit.server.handlers;
 import org.json.simple.JSONObject;
 
 import net.bmagnu.pixit.common.Settings;
+import net.bmagnu.pixit.server.ClientHandler;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
@@ -16,8 +17,12 @@ public class PlayCzarTheme implements ClientMessageHandler {
 			return getDefaultFail("Theme cannot be empty!");
 		}
 		
+		server.playCzarTheme(theme);
 		
-		return null;
+		return getDefaultSuccess();
 	}
 
+	static {
+		ClientHandler.registerHandler("playCzarTheme", new PlayCzarTheme());
+	}
 }

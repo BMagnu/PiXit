@@ -12,4 +12,11 @@ public interface ClientMessageHandler {
 		
 		return fail;
 	}
+	
+	default JSONObject getDefaultSuccess() {
+		JSONObject success = new JSONObject();
+		success.put("success", true);
+		
+		return success;
+	}
 }

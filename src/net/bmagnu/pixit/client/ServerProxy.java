@@ -28,7 +28,7 @@ public class ServerProxy {
 		
 	}
 	
-	public void playImageGuess(int imageSlot) {
+	public void playImageGuess(int imageId) {
 		
 	}
 	
