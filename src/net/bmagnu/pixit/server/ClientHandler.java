@@ -1,10 +1,11 @@
 package net.bmagnu.pixit.server;
 
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+
+import net.bmagnu.pixit.server.Server.Connection;
 
 public class ClientHandler {
 	
@@ -12,9 +13,9 @@ public class ClientHandler {
 	
 	private GameServer gameserver;
 	
-	private Socket socket;
+	private Connection socket;
 	
-	public ClientHandler(GameServer gameserver, Socket socket) {
+	public ClientHandler(GameServer gameserver, Connection socket) {
 		this.gameserver = gameserver;
 		this.socket = socket;
 		System.out.println("Created new ClientHandler with " + handlers.size() + " Handlers registered!");

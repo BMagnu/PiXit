@@ -6,11 +6,9 @@ import java.util.Map;
 import net.bmagnu.pixit.common.GameState;
 
 public class ServerProxy {
-	
-	private ClientMeta client;
 
-	public ServerProxy(ClientMeta client) {
-		this.client = client;
+	public ServerProxy() {
+		
 	}
 	
 	public Map<Integer, Integer> requestNewImages(){
@@ -32,16 +30,12 @@ public class ServerProxy {
 		
 	}
 	
-	public GameState queryGameState() {
-		return null;
-	}
-	
 	public Image loadImage() {
 		
 		return null;
 	}
 	
-	public void registerPlayer() {
-		
+	public int registerPlayer() {
+		return 0;
 	}
 }

@@ -65,20 +65,26 @@ public class Server {
 	}
 	
 	
-	private class Connection extends Thread {
+	public class Connection extends Thread {
 		private Socket socket;
+		
+		private PrintWriter out;
 		
 		public Connection(Socket socket) {
 			this.socket = socket;
 		}
 		
+		public synchronized void send(String toSend) {
+			out.println(toSend);
+		}
+		
 		@Override
 		public void run() {
 			try {
-				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+				out = new PrintWriter(socket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
-				ClientHandler client = new ClientHandler(server, socket);
+				ClientHandler client = new ClientHandler(server, this);
 				
 				String lineIn;
 				
@@ -87,7 +93,7 @@ public class Server {
 						JSONParser parser = new JSONParser();
 						JSONObject jsonIn = (JSONObject) parser.parse(lineIn);
 						JSONObject jsonOut = client.handleRecieveMessage(jsonIn);
-						out.println(jsonOut.toJSONString());
+						send(jsonOut.toJSONString());
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
