@@ -1,9 +1,15 @@
 package net.bmagnu.pixit.server;
 
+import java.net.Socket;
+
 import org.json.simple.JSONObject;
 
 public interface ClientMessageHandler {
-	public JSONObject handle(JSONObject data, GameServer server);
+	public default JSONObject handle(JSONObject data, GameServer server, Socket socket) {
+		return handle(data, server);
+	}
+	
+	JSONObject handle(JSONObject data, GameServer server);
 	
 	default JSONObject getDefaultFail(String reason) {
 		JSONObject fail = new JSONObject();

@@ -1,5 +1,7 @@
 package net.bmagnu.pixit.server.handlers;
 
+import java.net.Socket;
+
 import org.json.simple.JSONObject;
 
 import net.bmagnu.pixit.server.ClientHandler;
@@ -10,7 +12,7 @@ import net.bmagnu.pixit.server.Player;
 public class RegisterPlayer implements ClientMessageHandler {
 
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server) {
+	public JSONObject handle(JSONObject data, GameServer server, Socket socket) {
 		Player player = new Player();
 		
 		int playerId = server.registerPlayer(player);
@@ -21,6 +23,11 @@ public class RegisterPlayer implements ClientMessageHandler {
 			
 		return json;
 	
+	}
+	
+	@Override
+	public JSONObject handle(JSONObject data, GameServer server) {
+		throw new IllegalStateException("Can't Register Player without Socket");
 	}
 
 	static {

@@ -31,7 +31,7 @@ public class GameServer {
 	public void playCzarTheme(String theme) {
 		currentImages.clear();
 		
-		Server.execute.addLast(() -> processCzarTheme(theme));
+		Server.addToQueue(() -> processCzarTheme(theme));
 	}
 	
 	public boolean playImage(int imageSlot, Integer playerId) {
@@ -56,7 +56,7 @@ public class GameServer {
 		p.imageSlots.put(imageSlot, null);
 		
 		if(currentImages.size() >= players.size())
-			Server.execute.addLast(() -> processAllImagesPlayed());
+			Server.addToQueue(() -> processAllImagesPlayed());
 		
 		return true;
 	}
@@ -76,7 +76,7 @@ public class GameServer {
 		currentImageGuesses.put(imageId, playerId);
 		
 		if(currentImageGuesses.size() >= players.size() - 1)
-			Server.execute.addLast(() -> processAllImagesGuessed());
+			Server.addToQueue(() -> processAllImagesGuessed());
 		
 		return true;
 	}
@@ -91,7 +91,7 @@ public class GameServer {
 		players.add(player);
 		
 		if(players.size() >= Settings.NUM_PLAYERS_TO_START)
-			Server.execute.addLast(() -> processInitialization());
+			Server.addToQueue(() -> processInitialization());
 		
 		return currentPlayer - 1;
 	}
