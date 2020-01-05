@@ -7,9 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,7 +20,7 @@ import net.bmagnu.pixit.common.Settings;
 
 public class Server {
 
-	public Deque<Runnable> execute = new LinkedBlockingDeque<>();
+	public BlockingDeque<Runnable> execute = new LinkedBlockingDeque<>();
 	
 	public volatile boolean isRunning = true;
 	
@@ -38,10 +39,12 @@ public class Server {
 	
 	public void run() throws InterruptedException, IOException {
 		server = new GameServer();
+		System.out.println("GameServer started!");
 		socket = new ServerSocket(Settings.PORT_SERVER);
-		clients = new ArrayList<>();		
+		clients = new ArrayList<>();
 		
 		Thread socketAcceptor = new Thread(() -> {
+			System.out.println("ServerSocket started!");
 			while(true) {
 				try {
 					Connection client = new Connection(socket.accept());
@@ -55,10 +58,9 @@ public class Server {
 		socketAcceptor.start();
 		
 		while(isRunning) {
-			Thread.sleep(1000);
-			
 			Runnable task = null;
-			while((task = execute.pollFirst()) != null) {
+			while((task = execute.pollFirst(1, TimeUnit.SECONDS)) != null) {
+				Thread.sleep(10);
 				task.run();
 			}
 		}
@@ -75,12 +77,15 @@ public class Server {
 		}
 		
 		public synchronized void send(String toSend) {
+			System.out.println("Sent message to " + socket.getInetAddress());
 			out.println(toSend);
 		}
 		
 		@Override
 		public void run() {
 			try {
+				System.out.println("New Connection by " + socket.getInetAddress());
+				
 				out = new PrintWriter(socket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
@@ -90,6 +95,8 @@ public class Server {
 				
 				while((lineIn = in.readLine()) != null) {
 					try {
+						System.out.println("Got message from " + socket.getInetAddress());
+						
 						JSONParser parser = new JSONParser();
 						JSONObject jsonIn = (JSONObject) parser.parse(lineIn);
 						JSONObject jsonOut = client.handleRecieveMessage(jsonIn);

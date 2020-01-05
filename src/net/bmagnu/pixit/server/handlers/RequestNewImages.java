@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import net.bmagnu.pixit.server.ClientHandler;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
 public class RequestNewImages implements ClientMessageHandler {
 
+	@SuppressWarnings ("unchecked")
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
 		Integer playerId = (Integer) data.get("playerId");
@@ -32,11 +32,8 @@ public class RequestNewImages implements ClientMessageHandler {
 		}
 		
 		json.put("slots", slots);
+		json.put("success", true);
 			
 		return json;
-	}
-
-	static {
-		ClientHandler.registerHandler("requestNewImages", new RequestNewImages());
 	}
 }

@@ -7,12 +7,12 @@ import java.util.Base64;
 
 import org.json.simple.JSONObject;
 
-import net.bmagnu.pixit.server.ClientHandler;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
 public class LoadImage implements ClientMessageHandler {
 
+	@SuppressWarnings ("unchecked")
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
 		Integer imageID = (Integer) data.get("id");
@@ -32,9 +32,4 @@ public class LoadImage implements ClientMessageHandler {
 			return getDefaultFail(e.getMessage());
 		}
 	}
-	
-	static {
-		ClientHandler.registerHandler("loadImage", new LoadImage());
-	}
-
 }

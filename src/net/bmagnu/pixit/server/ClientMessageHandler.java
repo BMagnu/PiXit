@@ -11,6 +11,7 @@ public interface ClientMessageHandler {
 	
 	JSONObject handle(JSONObject data, GameServer server);
 	
+	@SuppressWarnings ("unchecked")
 	default JSONObject getDefaultFail(String reason) {
 		JSONObject fail = new JSONObject();
 		fail.put("success", false);
@@ -19,6 +20,7 @@ public interface ClientMessageHandler {
 		return fail;
 	}
 	
+	@SuppressWarnings ("unchecked")
 	default JSONObject getDefaultSuccess() {
 		JSONObject success = new JSONObject();
 		success.put("success", true);

@@ -2,7 +2,6 @@ package net.bmagnu.pixit.server.handlers;
 
 import org.json.simple.JSONObject;
 
-import net.bmagnu.pixit.server.ClientHandler;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
@@ -18,9 +17,5 @@ public class PlayImage implements ClientMessageHandler {
 		} else {
 			return getDefaultFail("No Image in Defined Slot");
 		}
-	}
-
-	static {
-		ClientHandler.registerHandler("playImage", new PlayImage());
 	}
 }
