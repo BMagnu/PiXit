@@ -14,7 +14,7 @@ public class RequestNewImages implements ClientMessageHandler {
 	@SuppressWarnings ("unchecked")
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer playerId = (Integer) data.get("playerId");
+		Integer playerId = ((Long) data.get("playerId")).intValue();
 		
 		JSONObject json = new JSONObject();
 		

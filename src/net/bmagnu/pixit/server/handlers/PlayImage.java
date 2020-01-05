@@ -9,8 +9,8 @@ public class PlayImage implements ClientMessageHandler {
 
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer id = (Integer) data.get("imageSlot");
-		Integer playerId = (Integer) data.get("playerId");
+		Integer id = ((Long) data.get("imageSlot")).intValue();
+		Integer playerId = ((Long) data.get("playerId")).intValue();
 		
 		if(server.playImage(id, playerId)) {
 			return getDefaultSuccess();

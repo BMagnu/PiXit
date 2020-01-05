@@ -15,7 +15,7 @@ public class LoadImage implements ClientMessageHandler {
 	@SuppressWarnings ("unchecked")
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer imageID = (Integer) data.get("id");
+		Integer imageID = ((Long) data.get("id")).intValue();
 		String imagePath = server.images.get(imageID);
 		
 		try {

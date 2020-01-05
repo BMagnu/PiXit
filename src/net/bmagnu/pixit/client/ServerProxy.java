@@ -46,7 +46,7 @@ public class ServerProxy {
 		JSONObject request = new JSONObject();
 		request.put("playerId", connection.playerId);
 		
-		String json = buildJSON(request, "playImage");
+		String json = buildJSON(request, "requestNewImages");
 		
 		try {
 			JSONObject response = connection.sendWaitForResponse(json);
@@ -165,7 +165,7 @@ public class ServerProxy {
 			JSONObject response = connection.sendWaitForResponse(json);
 			
 			if((Boolean)response.get("success"))
-				return (Integer)response.get("playerId");
+				return ((Long)response.get("playerId")).intValue();
 			else
 				throw new IllegalArgumentException("Server Error");
 		} catch (InterruptedException | ParseException e) {

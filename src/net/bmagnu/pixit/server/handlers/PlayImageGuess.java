@@ -9,8 +9,8 @@ public class PlayImageGuess implements ClientMessageHandler {
 
 	@Override
 	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer id = (Integer) data.get("imageId");
-		Integer playerId = (Integer) data.get("playerId");
+		Integer id = ((Long) data.get("imageId")).intValue();
+		Integer playerId = ((Long) data.get("playerId")).intValue();
 		
 		if(server.playImageGuess(id, playerId)) {
 			return getDefaultSuccess();
