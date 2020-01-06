@@ -1,12 +1,14 @@
 package net.bmagnu.pixit.client;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.bmagnu.pixit.common.GameState;
@@ -69,10 +71,31 @@ public class Client extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		List<String> args = getParameters().getRaw();
-		
 		initGUI(primaryStage);
 		
-		initGame(args.size() > 0 ? args.get(0) : "127.0.0.1");
+		String ip = queryIp();
+		
+		if(ip.isEmpty()) {
+			Platform.exit();
+		}
+		else {		
+			initGame(ip);
+		}
+	}
+
+	private String queryIp() {
+		TextInputDialog dialog = new TextInputDialog("127.0.0.1");
+		dialog.setTitle("Server IP");
+		dialog.setHeaderText("Connecting to Server...");
+		dialog.setContentText("Please enter the Server IP:");
+
+		Optional<String> result = dialog.showAndWait();
+
+		String ip = "";
+		
+		if (result.isPresent()){
+		    ip = result.get();
+		}
+		return ip;
 	}
 }
