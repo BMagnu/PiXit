@@ -8,7 +8,8 @@ public enum GameState {
 	STATE_WAITING_FOR_CARDS(0),
 	STATE_WAITING_FOR_CZAR(1),
 	STATE_WAITING_FOR_CZAR_YOU(2),
-	STATE_WAITING_FOR_GUESS(3);
+	STATE_WAITING_FOR_GUESS(3),
+	STATE_WAITING_FOR_GUESS_CZAR(4);
 
 	private int serialId;
 	private static Map<Integer, GameState> serializationMap = new HashMap<>();

@@ -12,9 +12,9 @@ import net.bmagnu.pixit.common.GameState;
 import net.bmagnu.pixit.common.Settings;
 
 public class GameServer {
-	public Map<Integer, String> images;
+	public Map<Integer, String> images = new HashMap<>();
 	
-	public List<Integer> freeImages;
+	public List<Integer> freeImages = new ArrayList<>();
 	
 	public GameState gameState;
 	
@@ -96,7 +96,7 @@ public class GameServer {
 		return currentPlayer - 1;
 	}
 	
-	public Map<Integer, Integer> requestNewImages(Integer playerId) {
+	public synchronized Map<Integer, Integer> requestNewImages(Integer playerId) {
 		Player player = players.get(playerId);
 		
 		for(int i = 0; i < Settings.IMAGE_COUNT; i++) {
@@ -133,7 +133,11 @@ public class GameServer {
 		Collections.shuffle(images);
 		
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
+			if(i != currentPlayer)
+				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
+			else
+				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS_CZAR);
+				
 			players.get(i).proxy.notifyImages(images);
 		}
 	}
@@ -161,7 +165,17 @@ public class GameServer {
 		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && ((players.size() - 1) - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
 			players.get(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 		
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).proxy.notifyResults(correctImage, players.get(i).points);
+		}
+		
 		currentPlayer++;
+		
+		try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		for(int i = 0; i < players.size(); i++) {
 			if(i == currentPlayer) 

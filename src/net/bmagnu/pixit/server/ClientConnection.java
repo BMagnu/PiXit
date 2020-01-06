@@ -24,6 +24,7 @@ public class ClientConnection extends Thread {
 	
 	public synchronized void send(String toSend) {
 		System.out.println("Sent message to " + socket.getInetAddress());
+		System.out.println(toSend);
 		out.println(toSend);
 	}
 	
@@ -42,6 +43,7 @@ public class ClientConnection extends Thread {
 			while((lineIn = in.readLine()) != null) {
 				try {
 					System.out.println("Got message from " + socket.getInetAddress());
+					System.out.println(lineIn);
 					
 					JSONParser parser = new JSONParser();
 					JSONObject jsonIn = (JSONObject) parser.parse(lineIn);

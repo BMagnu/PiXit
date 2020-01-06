@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javafx.application.Platform;
 import net.bmagnu.pixit.common.Settings;
 
 public class ServerConnection extends Thread {
@@ -50,6 +51,7 @@ public class ServerConnection extends Thread {
 		requireResponse = true;
 		send(toSend);
 		String response = messages.takeFirst();
+		System.out.println("Got Response");
 		requireResponse = false;
 		JSONParser parser = new JSONParser();
 		return (JSONObject) parser.parse(response);
@@ -85,7 +87,7 @@ public class ServerConnection extends Thread {
 				messages.putLast(lineIn);
 				
 				if(!requireResponse)
-					handleMessages();
+					Platform.runLater(() -> handleMessages());
 			}
 			
 			in.close();

@@ -10,5 +10,5 @@ public class Settings {
 	public static final short POINTS_GUESSED = 1;
 	
 	public static final short MIN_CZAR_DELTA = 1;
-	public static final short IMAGE_COUNT = 7;
+	public static final short IMAGE_COUNT = 2;
 }

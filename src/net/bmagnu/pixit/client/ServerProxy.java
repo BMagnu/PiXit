@@ -1,6 +1,5 @@
 package net.bmagnu.pixit.client;
 
-import java.awt.Image;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,11 +7,11 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+
+import javafx.scene.image.Image;
 
 public class ServerProxy {
 	
@@ -56,7 +55,7 @@ public class ServerProxy {
 				
 				for(Object slotO : slots) {
 					JSONObject slot = (JSONObject) slotO;
-					imageSlots.put((Integer)slot.get("slot"), (Integer)slot.get("image"));
+					imageSlots.put(((Long)slot.get("slot")).intValue(), ((Long)slot.get("image")).intValue());
 				}
 				
 				return imageSlots;
@@ -144,7 +143,7 @@ public class ServerProxy {
 			
 			if((Boolean)response.get("success")) {
 				InputStream imageStream = new ByteArrayInputStream(Base64.getDecoder().decode((String)response.get("image")));
-				Image image = ImageIO.read(imageStream);
+				Image image = new Image(imageStream);
 				imageStream.close();
 				return image;
 			}

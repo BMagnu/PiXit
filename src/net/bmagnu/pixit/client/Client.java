@@ -1,69 +1,55 @@
 package net.bmagnu.pixit.client;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import net.bmagnu.pixit.common.GameState;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import net.bmagnu.pixit.common.Settings;
-
-public class Client extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 805316169294862575L;
+public class Client extends Application {
 
 	private ServerConnection connection;
 	
 	public ServerProxy proxy;
 	
+	public GUIController controller;
+	
+	public GameState state;
+	
 	public static Client instance;
 	
 	public static void main(String[] args) {
-		JFrame window = new Client(args.length > 1 ? args[1] : "127.0.0.1");
-		window.setVisible(true);
+		launch(args);
 	}
 	
-	public Client(String serverIp) {
+	private void initGUI(Stage stage) throws IOException {
 		instance = this;
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("main_gui.fxml"));
 		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				try {
-					connection.shutdownSocket();
-					connection.join();
-					System.out.println("Shut down Socket");
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			    System.exit(0);
-			}
-		});
-		setSize(400,500);
-		setLayout(null);
-		setTitle("PiXit");
-		
+		Parent root = loader.load();
+	    
+        Scene scene = new Scene(root, 1600, 900);
+    
+        stage.setTitle("FXML Welcome");
+        stage.setScene(scene);
+        stage.show();
+        
+        controller = loader.getController();
+        
+        scene.getWindow().addEventFilter(WindowEvent.WINDOW_HIDING, event -> {
+    		connection.shutdownSocket();
+    	});
+        
+        controller.initialize();
+	}
+	
+	private void initGame(String serverIp) {
 		connection = new ServerConnection(serverIp);
 		proxy = new ServerProxy(connection);
 		
@@ -78,6 +64,15 @@ public class Client extends JFrame {
 		System.out.println("Registering at Server...");
 		connection.playerId = proxy.registerPlayer();
 		System.out.println("Player Id: " + connection.playerId);
+	}
+
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		List<String> args = getParameters().getRaw();
 		
+		initGUI(primaryStage);
+		
+		initGame(args.size() > 1 ? args.get(1) : "127.0.0.1");
 	}
 }

@@ -1,5 +1,7 @@
 package net.bmagnu.pixit.server.handlers;
 
+import java.util.HashMap;
+
 import org.json.simple.JSONObject;
 
 import net.bmagnu.pixit.server.ClientMessageHandler;
@@ -18,6 +20,7 @@ public class RegisterPlayer implements ClientMessageHandler {
 		
 		int playerId = server.registerPlayer(player);
 		player.proxy = new ClientProxy(socket);
+		player.imageSlots = new HashMap<>();
 		
 		JSONObject json = new JSONObject();
 		json.put("success", true);
