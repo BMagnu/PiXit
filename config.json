@@ -1,0 +1,10 @@
+{
+	"allowEmptyTheme" : true,
+	"portServer" : 53415,
+	"numPlayers" : 2,
+	"pointsCorrectGuess" : 3,
+	"pointsGoodCzar" : 2,
+	"pointsGotGuessed" : 1,
+	"minimumCzarDelta" : 1,
+	"imagesPerPlayer" : 7
+}

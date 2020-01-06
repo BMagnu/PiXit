@@ -59,7 +59,13 @@ public class Client extends Application {
 	}
 	
 	private void initGame(String serverIp) {
-		connection = new ServerConnection(serverIp);
+		int port = 53415;
+		if(serverIp.contains(":")) {
+			port = Integer.parseInt(serverIp.split(":")[1]);
+			serverIp = serverIp.split(":")[0];
+		}
+		
+		connection = new ServerConnection(serverIp, port);
 		proxy = new ServerProxy(connection);
 		
 		connection.start();

@@ -13,11 +13,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javafx.application.Platform;
-import net.bmagnu.pixit.common.Settings;
 
 public class ServerConnection extends Thread {
 	
 	private String serverIp;
+	private int port;
 	private volatile boolean shouldClose = false;
 	private volatile boolean requireResponse = false;
 	private Socket clientSocket;
@@ -28,8 +28,9 @@ public class ServerConnection extends Thread {
 	
 	public BlockingDeque<String> messages = new LinkedBlockingDeque<>();
 	
-	public ServerConnection(String serverIp) {
+	public ServerConnection(String serverIp, int port) {
 		this.serverIp = serverIp;
+		this.port = port;
 	}
 	
 	public void shutdownSocket() {
@@ -73,7 +74,7 @@ public class ServerConnection extends Thread {
 	@Override
 	public void run() {
 		try {
-			clientSocket = new Socket(serverIp, Settings.PORT_SERVER);
+			clientSocket = new Socket(serverIp, port);
 			
 			System.out.println("Socket Open");
 			
