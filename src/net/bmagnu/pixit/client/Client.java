@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.bmagnu.pixit.common.GameState;
@@ -25,6 +26,8 @@ public class Client extends Application {
 	
 	public static Client instance;
 	
+	private Image icon;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -34,18 +37,22 @@ public class Client extends Application {
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("main_gui.fxml"));
 		
+		icon = new Image(getClass().getResourceAsStream("icon.png"));
+
 		Parent root = loader.load();
 	    
         Scene scene = new Scene(root, 1600, 900);
     
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("PiXit");
+        stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.show();
         
         controller = loader.getController();
         
         scene.getWindow().addEventFilter(WindowEvent.WINDOW_HIDING, event -> {
-    		connection.shutdownSocket();
+        	if(connection != null)
+        		connection.shutdownSocket();
     	});
         
         controller.initialize();
@@ -88,6 +95,7 @@ public class Client extends Application {
 		dialog.setTitle("Server IP");
 		dialog.setHeaderText("Connecting to Server...");
 		dialog.setContentText("Please enter the Server IP:");
+		((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(icon);
 
 		Optional<String> result = dialog.showAndWait();
 
