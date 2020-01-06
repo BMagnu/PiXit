@@ -21,6 +21,7 @@ public class RegisterPlayer implements ClientMessageHandler {
 		int playerId = server.registerPlayer(player);
 		player.proxy = new ClientProxy(socket);
 		player.imageSlots = new HashMap<>();
+		player.points = 0;
 		
 		JSONObject json = new JSONObject();
 		json.put("success", true);

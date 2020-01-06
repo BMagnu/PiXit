@@ -9,5 +9,5 @@ public class Player {
 	
 	public Map<Integer, Integer> imageSlots; //ImageSlot | ImageId
 	
-	public Integer points;
+	public int points;
 }

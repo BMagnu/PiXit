@@ -143,9 +143,8 @@ public class GameServer {
 	}
 	
 	private void processAllImagesGuessed() {
-		currentImageGuesses.clear();
-		
-		Integer correctImage = currentImages.get(currentPlayer);
+	
+		Integer correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey();
 		
 		int numCorrectGuess = 0;
 		
