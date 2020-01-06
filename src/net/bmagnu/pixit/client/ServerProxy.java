@@ -14,8 +14,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import net.bmagnu.pixit.client.Client.Connection;
-
 public class ServerProxy {
 	
 	/*
@@ -27,9 +25,9 @@ public class ServerProxy {
 		handlers.put("requestNewImages", new RequestNewImages());
 	 */
 
-	private Connection connection;
+	private ServerConnection connection;
 	
-	public ServerProxy(Connection connection) {
+	public ServerProxy(ServerConnection connection) {
 		this.connection = connection;
 	}
 	

@@ -2,10 +2,8 @@ package net.bmagnu.pixit.server;
 
 import org.json.simple.JSONObject;
 
-import net.bmagnu.pixit.server.Server.Connection;
-
 public interface ClientMessageHandler {
-	public default JSONObject handle(JSONObject data, GameServer server, Connection socket) {
+	public default JSONObject handle(JSONObject data, GameServer server, ClientConnection socket) {
 		return handle(data, server);
 	}
 	

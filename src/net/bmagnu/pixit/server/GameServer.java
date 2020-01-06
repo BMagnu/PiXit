@@ -1,12 +1,12 @@
 package net.bmagnu.pixit.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 
 import net.bmagnu.pixit.common.GameState;
 import net.bmagnu.pixit.common.Settings;
@@ -129,7 +129,8 @@ public class GameServer {
 	private void processAllImagesPlayed() {
 		currentImageGuesses.clear();
 		
-		Set<Integer> images = currentImages.keySet();
+		List<Integer> images = new ArrayList<>(currentImages.keySet());
+		Collections.shuffle(images);
 		
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
@@ -160,12 +161,14 @@ public class GameServer {
 		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && ((players.size() - 1) - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
 			players.get(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 		
-		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
-			players.get(i).proxy.notifyResults(correctImage, players.get(i).points);
-		}
-		
 		currentPlayer++;
+
+		for(int i = 0; i < players.size(); i++) {
+			if(i == currentPlayer) 
+				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
+			else
+				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR);
+		}
 	}
 	
 	private void processCzarTheme(String theme) {

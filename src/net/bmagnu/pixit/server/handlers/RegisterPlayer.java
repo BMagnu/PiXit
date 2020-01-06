@@ -7,13 +7,13 @@ import net.bmagnu.pixit.server.ClientProxy;
 import net.bmagnu.pixit.server.GameServer;
 import net.bmagnu.pixit.server.Player;
 
-import net.bmagnu.pixit.server.Server.Connection;
+import net.bmagnu.pixit.server.ClientConnection;
 
 public class RegisterPlayer implements ClientMessageHandler {
 
 	@SuppressWarnings ("unchecked")
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server, Connection socket) {
+	public JSONObject handle(JSONObject data, GameServer server, ClientConnection socket) {
 		Player player = new Player();
 		
 		int playerId = server.registerPlayer(player);

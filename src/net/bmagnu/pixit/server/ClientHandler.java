@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import net.bmagnu.pixit.server.Server.Connection;
 import net.bmagnu.pixit.server.handlers.*;
 
 public class ClientHandler {
@@ -14,9 +13,9 @@ public class ClientHandler {
 	
 	private GameServer gameserver;
 	
-	private Connection socket;
+	private ClientConnection socket;
 	
-	public ClientHandler(GameServer gameserver, Connection socket) {
+	public ClientHandler(GameServer gameserver, ClientConnection socket) {
 		this.gameserver = gameserver;
 		this.socket = socket;
 		
