@@ -156,7 +156,8 @@ public class GameServer {
 			}
 			else {
 				int playerImageOriginator = currentImages.get(guess.getKey());
-				players.get(playerImageOriginator).points += Settings.POINTS_GUESSED;
+				if(playerImageOriginator != guess.getValue())
+					players.get(playerImageOriginator).points += Settings.POINTS_GUESSED;
 			}
 			
 		}
