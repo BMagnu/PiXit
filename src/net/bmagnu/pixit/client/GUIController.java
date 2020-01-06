@@ -37,6 +37,12 @@ public class GUIController {
 	private Label pointsLabel;
 	
 	@FXML 
+	private ImageView imgHover;
+	
+	@FXML
+	private StackPane hoverPane;
+	
+	@FXML 
 	protected void handleCzarThemeSubmit(ActionEvent event) {
 		//Clicked Submit Theme Button
 		Client.instance.proxy.playCzarTheme(czarThemeTextfield.getText());
@@ -67,9 +73,32 @@ public class GUIController {
         }
 	}
 	
+	@FXML 
+	protected void handleMouseEnter(MouseEvent event) {
+		Object obj = event.getSource();
+
+        if ( obj instanceof StackPane ) //Probably an Image
+        {
+        	Integer imageSlot = Integer.parseInt((String) ((StackPane) obj).getUserData()) - 1;
+        	
+        	imgHover.setImage(imageSlots[imageSlot].getImage());
+        	hoverPane.setVisible(true);
+        }
+	}
+	
+	@FXML 
+	protected void handleMouseExit(MouseEvent event) {
+		hoverPane.setVisible(false);
+	}
+	
+	
+	
 	public void initialize() {
 		imageSlots = new ImageView[]{img1, img2, img3, img4, img5, img6, img7};
 		imageId = new Integer[]{-1, -1, -1, -1, -1, -1, -1};
+		
+		hoverPane.setVisible(false);
+		hoverPane.setMouseTransparent(true);
 	}
 	
 	public void showCzarBox(boolean show) {
@@ -90,6 +119,7 @@ public class GUIController {
 			if(imageId.size() <= i || imageId.get(i) == null) {
 				//No Img
 				imageSlots[i].setVisible(false);
+				this.imageId[i] = -1;
 			}
 			else if(imageId.get(i) != this.imageId[i]) {
 				//New Img
@@ -116,6 +146,7 @@ public class GUIController {
 			if(imageId.size() <= i || imageId.get(i) == null) {
 				//No Img
 				imageSlots[i].setVisible(false);
+				this.imageId[i] = -1;
 			}
 			else if(imageId.get(i) != this.imageId[i]) {
 				//New Img

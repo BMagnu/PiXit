@@ -24,7 +24,7 @@ public class ClientConnection extends Thread {
 	
 	public synchronized void send(String toSend) {
 		System.out.println("Sent message to " + socket.getInetAddress());
-		System.out.println(toSend);
+		//System.out.println(toSend);
 		out.println(toSend);
 	}
 	

@@ -73,6 +73,6 @@ public class Client extends Application {
 		
 		initGUI(primaryStage);
 		
-		initGame(args.size() > 1 ? args.get(1) : "127.0.0.1");
+		initGame(args.size() > 0 ? args.get(0) : "127.0.0.1");
 	}
 }

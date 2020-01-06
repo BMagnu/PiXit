@@ -30,7 +30,7 @@ public class Server {
 	
 	public static void main(String[] args) throws InterruptedException, IOException {
 		instance = new Server();
-		instance.run(args.length > 1 ? args[1] : "./sample/");
+		instance.run(args.length > 0 ? args[0] : "./sample/");
 	}
 	
 	public void run(String imgPath) throws InterruptedException, IOException {
