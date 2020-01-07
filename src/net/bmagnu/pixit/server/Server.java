@@ -10,8 +10,6 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import net.bmagnu.pixit.common.Settings;
 
 public class Server {
@@ -67,8 +65,14 @@ public class Server {
 	private void initImages(String path) throws IOException {
 	
 		Files.walk(Paths.get(path)).filter((file) -> {
-			String mime = new MimetypesFileTypeMap().getContentType(file.toFile());
-			return mime.split("/")[0].equals("image");
+			String mime;
+			try {
+				mime = Files.probeContentType(file);
+				return mime != null && mime.split("/")[0].equals("image");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
 		}).forEachOrdered((file) -> {
 			int imageCount = server.images.size();
 			server.freeImages.add(imageCount);

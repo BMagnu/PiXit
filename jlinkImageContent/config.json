@@ -1,7 +1,7 @@
 {
 	"allowEmptyTheme" : true,
 	"portServer" : 53415,
-	"numPlayers" : 2,
+	"numPlayers" : 4,
 	"pointsCorrectGuess" : 3,
 	"pointsGoodCzar" : 2,
 	"pointsGotGuessed" : 1,

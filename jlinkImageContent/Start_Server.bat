@@ -1,0 +1,1 @@
+.\bin\java.exe --module pixit/net.bmagnu.pixit.server.Server "%~1"
