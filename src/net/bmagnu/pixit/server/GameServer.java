@@ -144,7 +144,7 @@ public class GameServer {
 	
 	private void processAllImagesGuessed() {
 	
-		Integer correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey();
+		int correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey();
 		
 		int numCorrectGuess = 0;
 		
@@ -165,14 +165,23 @@ public class GameServer {
 		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && ((players.size() - 1) - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
 			players.get(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 		
+		try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).proxy.notifyResults(correctImage, players.get(i).points);
 		}
 		
 		currentPlayer++;
 		
+		if(currentPlayer >= players.size())
+			currentPlayer = 0;
+		
 		try {
-			Thread.sleep(2500);
+			Thread.sleep(Settings.POST_ROUND_WAIT);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

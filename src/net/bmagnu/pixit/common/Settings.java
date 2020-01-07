@@ -21,6 +21,8 @@ public class Settings {
 	public static final short MIN_CZAR_DELTA;
 	public static final short IMAGE_COUNT;
 	
+	public static final short POST_ROUND_WAIT;
+	
 	static {
 		//Load Config from File
 		
@@ -34,6 +36,8 @@ public class Settings {
 		
 		short MIN_CZAR_DELTA_Loc = 1;
 		short IMAGE_COUNT_Loc = 7;
+		
+		short POST_ROUND_WAIT_Loc = 5000;
 		
 		if(loadFromFile) {
 			try {
@@ -52,6 +56,8 @@ public class Settings {
 				
 				MIN_CZAR_DELTA_Loc = ((Long) jsonIn.get("minimumCzarDelta")).shortValue();
 				IMAGE_COUNT_Loc = ((Long) jsonIn.get("imagesPerPlayer")).shortValue();
+				
+				POST_ROUND_WAIT_Loc = ((Long) jsonIn.get("postRoundWait")).shortValue();
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -68,6 +74,7 @@ public class Settings {
 		MIN_CZAR_DELTA = MIN_CZAR_DELTA_Loc;
 		IMAGE_COUNT = IMAGE_COUNT_Loc; 
 		
+		POST_ROUND_WAIT = POST_ROUND_WAIT_Loc;
 	}
 	
 	

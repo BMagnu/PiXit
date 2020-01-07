@@ -6,5 +6,6 @@
 	"pointsGoodCzar" : 2,
 	"pointsGotGuessed" : 1,
 	"minimumCzarDelta" : 1,
-	"imagesPerPlayer" : 7
+	"imagesPerPlayer" : 7,
+	"postRoundWait" : 5000
 }

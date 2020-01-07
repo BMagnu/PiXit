@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import net.bmagnu.pixit.common.GameState;
 
 public class GUIController {
 	
@@ -36,11 +37,17 @@ public class GUIController {
 	@FXML
 	private Label pointsLabel;
 	
+	@FXML
+	private Label infoBox;
+	
 	@FXML 
 	private ImageView imgHover;
 	
 	@FXML
 	private StackPane hoverPane;
+	
+	@FXML
+	private StackPane hoverBorder;
 	
 	@FXML 
 	protected void handleCzarThemeSubmit(ActionEvent event) {
@@ -59,14 +66,19 @@ public class GUIController {
         	
         	switch(Client.instance.state) {
 				case STATE_WAITING_FOR_CARDS :
+					Client.instance.state = GameState.STATE_WAITING_FOR_PLAYERS; //Can't submit more than once
+					highlightImage(imageSlot);
 					Client.instance.proxy.playImage(imageSlot);
 					break;
 				case STATE_WAITING_FOR_GUESS :
+					Client.instance.state = GameState.STATE_WAITING_FOR_PLAYERS; //Can't guess more than once
+					highlightImage(imageSlot);
 					Client.instance.proxy.playImageGuess(imageId[imageSlot]);
 					break;
 				case STATE_WAITING_FOR_CZAR :
 				case STATE_WAITING_FOR_CZAR_YOU :
 				case STATE_WAITING_FOR_GUESS_CZAR:
+				case STATE_WAITING_FOR_PLAYERS:
 					System.out.println("Can't click Images as Czar / while Czar is choosing the Theme");
 					break;
         	}
@@ -81,7 +93,20 @@ public class GUIController {
         {
         	Integer imageSlot = Integer.parseInt((String) ((StackPane) obj).getUserData()) - 1;
         	
-        	imgHover.setImage(imageSlots[imageSlot].getImage());
+        	if(imageId[imageSlot] == -1)
+        		return;
+        	
+        	Image image = imageSlots[imageSlot].getImage();
+        	
+        	imgHover.setImage(image);
+        	
+        	double aspectRatio = image.getWidth() / image.getHeight();
+        	double realWidth = Math.min(imgHover.getFitWidth(), imgHover.getFitHeight() * aspectRatio) - 1;
+        	double realHeight = Math.min(imgHover.getFitHeight(), imgHover.getFitWidth() / aspectRatio) - 1;
+        	
+        	hoverBorder.setMaxHeight(realHeight);
+        	hoverBorder.setMaxWidth(realWidth);
+        	
         	hoverPane.setVisible(true);
         }
 	}
@@ -110,8 +135,35 @@ public class GUIController {
 		czarTheme.setText(theme);
 	}
 	
+	public void setInfoBox(String info) {
+		infoBox.setText(info);
+	}
+	
 	public void setPoints(Integer points) {
 		pointsLabel.setText("Points: " + points);
+	}
+	
+	public void highlightImage(int imageSlot) {
+		for(int i = 0; i < 7; i++) {
+			if(imageId[i] == -1)
+				continue;
+			
+			if(i != imageSlot)
+				imageSlots[i].setOpacity(0.25);
+			
+			else
+				imageSlots[i].setOpacity(1);
+		}
+	}
+	
+	public void highlightImageById(int image) {
+		for(int i = 0; i < 7; i++) {
+			if(imageId[i] == image)
+				imageSlots[i].setOpacity(1);
+			
+			else if(imageId[i] != -1)
+				imageSlots[i].setOpacity(0.25);
+		}
 	}
 	
 	public void setNewImages(List<Integer> imageId) {
@@ -124,6 +176,7 @@ public class GUIController {
 			else if(imageId.get(i) != this.imageId[i]) {
 				//New Img
 				imageSlots[i].setVisible(true);
+				imageSlots[i].setOpacity(1);
 				
 				this.imageId[i] = imageId.get(i);
 				Image image = imageCache.get(imageId.get(i));
@@ -135,9 +188,10 @@ public class GUIController {
 				
 				imageSlots[i].setImage(image);
 			}
-			//else {
+			else {
+				imageSlots[i].setOpacity(1);
 				//Keep Img
-			//}
+			}
 		}
 	}
 	
@@ -151,6 +205,7 @@ public class GUIController {
 			else if(imageId.get(i) != this.imageId[i]) {
 				//New Img
 				imageSlots[i].setVisible(true);
+				imageSlots[i].setOpacity(1);
 				
 				this.imageId[i] = imageId.get(i);
 				Image image = imageCache.get(imageId.get(i));
