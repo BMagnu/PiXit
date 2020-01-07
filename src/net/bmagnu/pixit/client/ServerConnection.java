@@ -8,9 +8,8 @@ import java.net.Socket;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javafx.application.Platform;
 
@@ -48,26 +47,20 @@ public class ServerConnection extends Thread {
 		out.println(toSend);
 	}
 	
-	public synchronized JSONObject sendWaitForResponse(String toSend) throws InterruptedException, ParseException {
+	public synchronized JsonObject sendWaitForResponse(String toSend) throws InterruptedException {
 		requireResponse = true;
 		send(toSend);
 		String response = messages.takeFirst();
 		System.out.println("Got Response");
 		requireResponse = false;
-		JSONParser parser = new JSONParser();
-		return (JSONObject) parser.parse(response);
+		return (JsonObject) JsonParser.parseString(response);
 	}
 	
 	private void handleMessages() {
 		String message;
 		while((message = messages.pollFirst()) != null) {
-			try {
-				JSONParser parser = new JSONParser();
-				JSONObject jsonIn = (JSONObject) parser.parse(message);
-				handler.handleRecieveMessage(jsonIn);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			JsonObject jsonIn = (JsonObject) JsonParser.parseString(message);
+			handler.handleRecieveMessage(jsonIn);
 		}
 	}
 	

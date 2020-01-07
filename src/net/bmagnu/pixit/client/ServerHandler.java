@@ -3,7 +3,7 @@ package net.bmagnu.pixit.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.handlers.*;
 
@@ -21,7 +21,7 @@ public class ServerHandler {
 	}
 	
 	
-	public void handleRecieveMessage(JSONObject json) {
-		handlers.get((String) json.get("id")).handle((JSONObject) json.get("data"));
+	public void handleRecieveMessage(JsonObject json) {
+		handlers.get(json.get("id").getAsString()).handle((JsonObject) json.get("data"));
 	}	
 }

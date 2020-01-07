@@ -2,8 +2,8 @@ package net.bmagnu.pixit.server;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.common.GameState;
 
@@ -15,51 +15,46 @@ public class ClientProxy {
 		this.client = client;
 	}
 	
-	@SuppressWarnings ("unchecked")
-	private String buildJSON(JSONObject data, String id) {
-		JSONObject toSend = new JSONObject();
-		toSend.put("id", id);
-		toSend.put("data", data);
-		return toSend.toJSONString();
+	private String buildJson(JsonObject data, String id) {
+		JsonObject toSend = new JsonObject();
+		toSend.addProperty("id", id);
+		toSend.add("data", data);
+		return toSend.toString();
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void notifyImages(List<Integer> images) {
-		JSONObject request = new JSONObject();
+		JsonObject request = new JsonObject();
 		
-		JSONArray imagesJson = new JSONArray();
+		JsonArray imagesJson = new JsonArray();
 		
 		for(Integer image : images) {
 			imagesJson.add(image);
 		}
 		
-		request.put("images", imagesJson);
+		request.add("images", imagesJson);
 		
-		client.send(buildJSON(request, "images"));
+		client.send(buildJson(request, "images"));
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void notifyResults(int correctImage, int points) {
-		JSONObject request = new JSONObject();
-		request.put("correctImageId", correctImage);
-		request.put("totalPoints", points);
+		JsonObject request = new JsonObject();
+		request.addProperty("correctImageId", correctImage);
+		request.addProperty("totalPoints", points);
 		
-		client.send(buildJSON(request, "results"));
+		client.send(buildJson(request, "results"));
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void notifyTheme(String theme) {
-		JSONObject request = new JSONObject();
-		request.put("theme", theme);
+		JsonObject request = new JsonObject();
+		request.addProperty("theme", theme);
 		
-		client.send(buildJSON(request, "theme"));
+		client.send(buildJson(request, "theme"));
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void notifyNewGamestate(GameState state) {
-		JSONObject request = new JSONObject();
-		request.put("state", state.serialize());
+		JsonObject request = new JsonObject();
+		request.addProperty("state", state.serialize());
 		
-		client.send(buildJSON(request, "gamestate"));
+		client.send(buildJson(request, "gamestate"));
 	}
 }

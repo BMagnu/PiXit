@@ -1,6 +1,6 @@
 package net.bmagnu.pixit.server.handlers;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
@@ -8,9 +8,9 @@ import net.bmagnu.pixit.server.GameServer;
 public class PlayImage implements ClientMessageHandler {
 
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer id = ((Long) data.get("imageSlot")).intValue();
-		Integer playerId = ((Long) data.get("playerId")).intValue();
+	public JsonObject handle(JsonObject data, GameServer server) {
+		Integer id = data.get("imageSlot").getAsInt();
+		Integer playerId = data.get("playerId").getAsInt();
 		
 		if(server.playImage(id, playerId)) {
 			return getDefaultSuccess();

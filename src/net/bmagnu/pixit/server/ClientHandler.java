@@ -3,7 +3,7 @@ package net.bmagnu.pixit.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.server.handlers.*;
 
@@ -30,8 +30,8 @@ public class ClientHandler {
 	}
 	
 	
-	public JSONObject handleRecieveMessage(JSONObject json) {
-		JSONObject response = handlers.get((String) json.get("id")).handle((JSONObject) json.get("data"), gameserver, socket);
+	public JsonObject handleRecieveMessage(JsonObject json) {
+		JsonObject response = handlers.get(json.get("id").getAsString()).handle((JsonObject) json.get("data"), gameserver, socket);
 		return response;
 	}
 }

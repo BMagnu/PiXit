@@ -1,7 +1,7 @@
 package net.bmagnu.pixit.client;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public interface ServerMessageHandler {
-	public void handle(JSONObject data);
+	public void handle(JsonObject data);
 }

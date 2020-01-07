@@ -3,8 +3,9 @@ package net.bmagnu.pixit.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.Client;
 import net.bmagnu.pixit.client.ServerMessageHandler;
@@ -12,14 +13,14 @@ import net.bmagnu.pixit.client.ServerMessageHandler;
 public class NotifyImages implements ServerMessageHandler {
 
 	@Override
-	public void handle(JSONObject data) {
-		JSONArray images = (JSONArray) data.get("images");
+	public void handle(JsonObject data) {
+		JsonArray images = (JsonArray) data.get("images");
 		
 		List<Integer> imageIds = new ArrayList<>();
 		
-		for(Object imageO : images) {
+		for(JsonElement image : images) {
 			
-			imageIds.add(((Long) imageO).intValue());
+			imageIds.add(image.getAsInt());
 		}
 		
 		Client.instance.controller.setNewImages(imageIds);

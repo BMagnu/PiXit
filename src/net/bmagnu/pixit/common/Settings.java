@@ -3,8 +3,8 @@ package net.bmagnu.pixit.common;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Settings {
 	
@@ -43,21 +43,20 @@ public class Settings {
 			try {
 				String data = new String(Files.readAllBytes(Paths.get("./config.json")));
 				
-				JSONParser parser = new JSONParser();
-				JSONObject jsonIn = (JSONObject) parser.parse(data);
+				JsonObject jsonIn = (JsonObject) JsonParser.parseString(data);
 				
-				ALLOW_EMPTY_THEME_Loc = (boolean) jsonIn.get("allowEmptyTheme");
-				PORT_SERVER_Loc = ((Long) jsonIn.get("portServer")).intValue();
-				NUM_PLAYERS_TO_START_Loc = ((Long) jsonIn.get("numPlayers")).shortValue();
+				ALLOW_EMPTY_THEME_Loc = jsonIn.get("allowEmptyTheme").getAsBoolean();
+				PORT_SERVER_Loc = jsonIn.get("portServer").getAsInt();
+				NUM_PLAYERS_TO_START_Loc = jsonIn.get("numPlayers").getAsShort();
 				
-				POINTS_CORRECT_GUESS_Loc = ((Long) jsonIn.get("pointsCorrectGuess")).shortValue();
-				POINTS_GOOD_CZAR_Loc = ((Long) jsonIn.get("pointsGoodCzar")).shortValue();
-				POINTS_GUESSED_Loc = ((Long) jsonIn.get("pointsGotGuessed")).shortValue();
+				POINTS_CORRECT_GUESS_Loc = jsonIn.get("pointsCorrectGuess").getAsShort();
+				POINTS_GOOD_CZAR_Loc = jsonIn.get("pointsGoodCzar").getAsShort();
+				POINTS_GUESSED_Loc = jsonIn.get("pointsGotGuessed").getAsShort();
 				
-				MIN_CZAR_DELTA_Loc = ((Long) jsonIn.get("minimumCzarDelta")).shortValue();
-				IMAGE_COUNT_Loc = ((Long) jsonIn.get("imagesPerPlayer")).shortValue();
+				MIN_CZAR_DELTA_Loc = jsonIn.get("minimumCzarDelta").getAsShort();
+				IMAGE_COUNT_Loc = jsonIn.get("imagesPerPlayer").getAsShort();
 				
-				POST_ROUND_WAIT_Loc = ((Long) jsonIn.get("postRoundWait")).shortValue();
+				POST_ROUND_WAIT_Loc = jsonIn.get("postRoundWait").getAsShort();
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

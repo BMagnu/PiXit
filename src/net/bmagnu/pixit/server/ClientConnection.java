@@ -6,9 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class ClientConnection extends Thread {
 	private Socket socket;
@@ -41,17 +40,12 @@ public class ClientConnection extends Thread {
 			String lineIn;
 			
 			while((lineIn = in.readLine()) != null) {
-				try {
-					System.out.println("Got message from " + socket.getInetAddress());
-					System.out.println(lineIn);
-					
-					JSONParser parser = new JSONParser();
-					JSONObject jsonIn = (JSONObject) parser.parse(lineIn);
-					JSONObject jsonOut = client.handleRecieveMessage(jsonIn);
-					send(jsonOut.toJSONString());
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				System.out.println("Got message from " + socket.getInetAddress());
+				System.out.println(lineIn);
+				
+				JsonObject jsonIn = (JsonObject) JsonParser.parseString(lineIn);
+				JsonObject jsonOut = client.handleRecieveMessage(jsonIn);
+				send(jsonOut.toString());
 			}
 			
 		} catch (IOException e) {

@@ -27,7 +27,7 @@ module pixit {
 	
 	requires transitive javafx.graphics;
 	
-	requires transitive json.simple;
+	requires transitive com.google.gson;
 	
 	opens net.bmagnu.pixit.client to javafx.fxml;
 }

@@ -2,7 +2,7 @@ package net.bmagnu.pixit.server.handlers;
 
 import java.util.HashMap;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.ClientProxy;
@@ -13,9 +13,8 @@ import net.bmagnu.pixit.server.ClientConnection;
 
 public class RegisterPlayer implements ClientMessageHandler {
 
-	@SuppressWarnings ("unchecked")
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server, ClientConnection socket) {
+	public JsonObject handle(JsonObject data, GameServer server, ClientConnection socket) {
 		Player player = new Player();
 		
 		int playerId = server.registerPlayer(player);
@@ -23,16 +22,16 @@ public class RegisterPlayer implements ClientMessageHandler {
 		player.imageSlots = new HashMap<>();
 		player.points = 0;
 		
-		JSONObject json = new JSONObject();
-		json.put("success", true);
-		json.put("playerId", playerId);
+		JsonObject json = new JsonObject();
+		json.addProperty("success", true);
+		json.addProperty("playerId", playerId);
 			
 		return json;
 	
 	}
 	
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server) {
+	public JsonObject handle(JsonObject data, GameServer server) {
 		throw new IllegalStateException("Can't Register Player without Socket");
 	}
 }

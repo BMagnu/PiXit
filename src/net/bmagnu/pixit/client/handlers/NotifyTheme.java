@@ -1,6 +1,6 @@
 package net.bmagnu.pixit.client.handlers;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.Client;
 import net.bmagnu.pixit.client.ServerMessageHandler;
@@ -8,8 +8,8 @@ import net.bmagnu.pixit.client.ServerMessageHandler;
 public class NotifyTheme implements ServerMessageHandler {
 
 	@Override
-	public void handle(JSONObject data) {
-		String theme = (String) data.get("theme");
+	public void handle(JsonObject data) {
+		String theme = data.get("theme").getAsString();
 		Client.instance.controller.setCzarTheme(theme);
 	}
 	

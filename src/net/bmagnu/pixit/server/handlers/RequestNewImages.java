@@ -3,36 +3,35 @@ package net.bmagnu.pixit.server.handlers;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
 public class RequestNewImages implements ClientMessageHandler {
 
-	@SuppressWarnings ("unchecked")
 	@Override
-	public JSONObject handle(JSONObject data, GameServer server) {
-		Integer playerId = ((Long) data.get("playerId")).intValue();
+	public JsonObject handle(JsonObject data, GameServer server) {
+		Integer playerId = data.get("playerId").getAsInt();
 		
-		JSONObject json = new JSONObject();
+		JsonObject json = new JsonObject();
 		
 		Map<Integer, Integer> imageSlots = server.requestNewImages(playerId);
 		
-		JSONArray slots = new JSONArray();
+		JsonArray slots = new JsonArray();
 		
 		for(Entry<Integer, Integer> imageSlot : imageSlots.entrySet()) {
-			JSONObject currentSlot = new JSONObject();
+			JsonObject currentSlot = new JsonObject();
 			
-			currentSlot.put("slot", imageSlot.getKey());
-			currentSlot.put("image", imageSlot.getValue());
+			currentSlot.addProperty("slot", imageSlot.getKey());
+			currentSlot.addProperty("image", imageSlot.getValue());
 			
 			slots.add(currentSlot);
 		}
 		
-		json.put("slots", slots);
-		json.put("success", true);
+		json.add("slots", slots);
+		json.addProperty("success", true);
 			
 		return json;
 	}

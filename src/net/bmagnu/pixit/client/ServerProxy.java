@@ -7,22 +7,13 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import javafx.scene.image.Image;
 
 public class ServerProxy {
-	
-	/*
-	    handlers.put("loadImage", new LoadImage());
-		handlers.put("playCzarTheme", new PlayCzarTheme());
-		handlers.put("playImage", new PlayImage());
-		handlers.put("playImageGuess", new PlayImageGuess());
-		handlers.put("registerPlayer", new RegisterPlayer());
-		handlers.put("requestNewImages", new RequestNewImages());
-	 */
 
 	private ServerConnection connection;
 	
@@ -30,142 +21,136 @@ public class ServerProxy {
 		this.connection = connection;
 	}
 	
-	@SuppressWarnings ("unchecked")
-	private String buildJSON(JSONObject data, String id) {
-		JSONObject toSend = new JSONObject();
-		toSend.put("id", id);
-		toSend.put("data", data);
-		return toSend.toJSONString();
+	private String buildJson(JsonObject data, String id) {
+		JsonObject toSend = new JsonObject();
+		toSend.addProperty("id", id);
+		toSend.add("data", data);
+		return toSend.toString();
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public Map<Integer, Integer> requestNewImages(){
-		JSONObject request = new JSONObject();
-		request.put("playerId", connection.playerId);
+		JsonObject request = new JsonObject();
+		request.addProperty("playerId", connection.playerId);
 		
-		String json = buildJSON(request, "requestNewImages");
+		String json = buildJson(request, "requestNewImages");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success")) {
+			if(response.get("success").getAsBoolean()) {
 				
-				JSONArray slots = (JSONArray) response.get("slots");
+				JsonArray slots = (JsonArray) response.get("slots");
 				Map<Integer, Integer> imageSlots = new HashMap<>();
 				
-				for(Object slotO : slots) {
-					JSONObject slot = (JSONObject) slotO;
-					imageSlots.put(((Long)slot.get("slot")).intValue(), ((Long)slot.get("image")).intValue());
+				for(JsonElement slotO : slots) {
+					JsonObject slot = (JsonObject) slotO;
+					imageSlots.put(slot.get("slot").getAsInt(), slot.get("image").getAsInt());
 				}
 				
 				return imageSlots;
 			}
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void playImage(int imageSlot) {
-		JSONObject request = new JSONObject();
-		request.put("imageSlot", imageSlot);
-		request.put("playerId", connection.playerId);
+		JsonObject request = new JsonObject();
+		request.addProperty("imageSlot", imageSlot);
+		request.addProperty("playerId", connection.playerId);
 		
-		String json = buildJSON(request, "playImage");
+		String json = buildJson(request, "playImage");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success")) 
+			if(response.get("success").getAsBoolean()) 
 				return;
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void playCzarTheme(String theme) {
-		JSONObject request = new JSONObject();
-		request.put("theme", theme);
+		JsonObject request = new JsonObject();
+		request.addProperty("theme", theme);
 		
-		String json = buildJSON(request, "playCzarTheme");
+		String json = buildJson(request, "playCzarTheme");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success")) 
+			if(response.get("success").getAsBoolean()) 
 				return;
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public void playImageGuess(int imageId) {
-		JSONObject request = new JSONObject();
-		request.put("imageId", imageId);
-		request.put("playerId", connection.playerId);
+		JsonObject request = new JsonObject();
+		request.addProperty("imageId", imageId);
+		request.addProperty("playerId", connection.playerId);
 		
-		String json = buildJSON(request, "playImageGuess");
+		String json = buildJson(request, "playImageGuess");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success")) 
+			if(response.get("success").getAsBoolean()) 
 				return;
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	@SuppressWarnings ("unchecked")
 	public Image loadImage(int imageId) {
 		
-		JSONObject request = new JSONObject();
-		request.put("id", imageId);
+		JsonObject request = new JsonObject();
+		request.addProperty("id", imageId);
 		
-		String json = buildJSON(request, "loadImage");
+		String json = buildJson(request, "loadImage");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success")) {
-				InputStream imageStream = new ByteArrayInputStream(Base64.getDecoder().decode((String)response.get("image")));
+			if(response.get("success").getAsBoolean()) {
+				InputStream imageStream = new ByteArrayInputStream(Base64.getDecoder().decode(response.get("image").getAsString()));
 				Image image = new Image(imageStream);
 				imageStream.close();
 				return image;
 			}
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException | IOException e) {
+		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");
 	}
 	
 	public int registerPlayer() {
-		String json = buildJSON(new JSONObject(), "registerPlayer");
+		String json = buildJson(new JsonObject(), "registerPlayer");
 		
 		try {
-			JSONObject response = connection.sendWaitForResponse(json);
+			JsonObject response = connection.sendWaitForResponse(json);
 			
-			if((Boolean)response.get("success"))
-				return ((Long)response.get("playerId")).intValue();
+			if(response.get("success").getAsBoolean())
+				return response.get("playerId").getAsInt();
 			else
 				throw new IllegalArgumentException("Server Error");
-		} catch (InterruptedException | ParseException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		throw new IllegalArgumentException("Client Error");

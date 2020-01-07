@@ -1,6 +1,6 @@
 package net.bmagnu.pixit.client.handlers;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.Client;
 import net.bmagnu.pixit.client.ServerMessageHandler;
@@ -8,9 +8,9 @@ import net.bmagnu.pixit.client.ServerMessageHandler;
 public class NotifyResults implements ServerMessageHandler {
 
 	@Override
-	public void handle(JSONObject data) {
-		Integer points = ((Long) data.get("totalPoints")).intValue();
-		Integer correctImg = ((Long) data.get("correctImageId")).intValue();
+	public void handle(JsonObject data) {
+		Integer points = data.get("totalPoints").getAsInt();
+		Integer correctImg = data.get("correctImageId").getAsInt();
 		
 		Client.instance.controller.setPoints(points);
 		Client.instance.controller.highlightImageById(correctImg);
