@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.common.GameState;
+import net.bmagnu.pixit.common.PiXitImage;
 
 public class ClientProxy {
 	
@@ -22,13 +23,17 @@ public class ClientProxy {
 		return toSend.toString();
 	}
 	
-	public void notifyImages(List<Integer> images) {
+	public void notifyImages(List<PiXitImage> images) {
 		JsonObject request = new JsonObject();
 		
 		JsonArray imagesJson = new JsonArray();
 		
-		for(Integer image : images) {
-			imagesJson.add(image);
+		for(PiXitImage image : images) {
+			JsonObject imageJson = new JsonObject();
+			imageJson.addProperty("id", image.imageId);
+			imageJson.addProperty("hash", image.hash);
+			
+			imagesJson.add(imageJson);
 		}
 		
 		request.add("images", imagesJson);

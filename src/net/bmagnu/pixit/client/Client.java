@@ -1,6 +1,9 @@
 package net.bmagnu.pixit.client;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 import javafx.application.Application;
@@ -8,7 +11,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -27,6 +29,12 @@ public class Client extends Application {
 	public static Client instance;
 	
 	private Image icon;
+	
+	private File imageCache = null;
+
+	public boolean cacheImages = false;
+	
+	public String name = "";
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -56,6 +64,14 @@ public class Client extends Application {
     	});
         
         controller.initialize();
+        
+		imageCache = new File("./cache");
+		
+		if(!imageCache.exists())
+			imageCache.mkdir();
+			
+		if(!imageCache.exists())
+			imageCache = null;
 	}
 	
 	private void initGame(String serverIp) {
@@ -80,7 +96,27 @@ public class Client extends Application {
 		connection.playerId = proxy.registerPlayer();
 		System.out.println("Player Id: " + connection.playerId);
 	}
+	
+	public Image loadFromCache(String imageHash) {
+		if(imageCache == null)
+			return null;
+		
+		File imageFile = new File(imageCache + "/" + imageHash);
+		if(!imageFile.exists())
+			return null;
+		
+		try {
+			InputStream imageStream = new FileInputStream(imageFile);
+			Image image = new Image(imageStream);
+			imageStream.close();
+			
+			return image;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 
+	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -97,18 +133,20 @@ public class Client extends Application {
 	}
 
 	private String queryIp() {
-		TextInputDialog dialog = new TextInputDialog("127.0.0.1");
-		dialog.setTitle("Server IP");
+		GUIOpenDialog dialog = new GUIOpenDialog("127.0.0.1");
+		dialog.setTitle("Settings");
 		dialog.setHeaderText("Connecting to Server...");
-		dialog.setContentText("Please enter the Server IP:");
 		((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(icon);
 
-		Optional<String> result = dialog.showAndWait();
+		Optional<GUIOpenDialogResult> result = dialog.showAndWait();
 
 		String ip = "";
 		
 		if (result.isPresent()){
-		    ip = result.get();
+			GUIOpenDialogResult data = result.get();
+		    ip = data.ip;
+		    name = data.name;
+		    cacheImages = data.caching;
 		}
 		return ip;
 	}

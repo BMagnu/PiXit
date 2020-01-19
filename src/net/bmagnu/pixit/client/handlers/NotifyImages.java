@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.Client;
+import net.bmagnu.pixit.client.PiXitImageRequest;
 import net.bmagnu.pixit.client.ServerMessageHandler;
 
 public class NotifyImages implements ServerMessageHandler {
@@ -16,11 +17,17 @@ public class NotifyImages implements ServerMessageHandler {
 	public void handle(JsonObject data) {
 		JsonArray images = (JsonArray) data.get("images");
 		
-		List<Integer> imageIds = new ArrayList<>();
+		List<PiXitImageRequest> imageIds = new ArrayList<>();
 		
 		for(JsonElement image : images) {
 			
-			imageIds.add(image.getAsInt());
+			PiXitImageRequest imageReq = new PiXitImageRequest();
+			
+			JsonObject imageJson = (JsonObject) image;
+			imageReq.id = imageJson.get("id").getAsInt();
+			imageReq.hash = imageJson.get("hash").getAsString();
+			
+			imageIds.add(imageReq);
 		}
 		
 		Client.instance.controller.setNewImages(imageIds);

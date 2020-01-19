@@ -67,6 +67,8 @@ public class ServerConnection extends Thread {
 	@Override
 	public void run() {
 		try {
+			System.out.println("Opening Socket");
+			
 			clientSocket = new Socket(serverIp, port);
 			
 			System.out.println("Socket Open");

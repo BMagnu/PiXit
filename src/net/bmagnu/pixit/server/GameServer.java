@@ -9,12 +9,14 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.bmagnu.pixit.common.GameState;
-import net.bmagnu.pixit.common.Settings;
+import net.bmagnu.pixit.common.PiXitImage;
 
 public class GameServer {
 	public Map<Integer, String> images = new HashMap<>();
 	
-	public List<Integer> freeImages = new ArrayList<>();
+	public Map<Integer, PiXitImage> imagesById = new HashMap<>();
+	
+	public List<PiXitImage> freeImages = new ArrayList<>();
 	
 	public GameState gameState;
 	
@@ -22,7 +24,7 @@ public class GameServer {
 	
 	public List<Player> players = new ArrayList<>();
 	
-	public Map<Integer, Integer> currentImages = new HashMap<>(); //ImageId | PlayerId
+	public Map<PiXitImage, Integer> currentImages = new HashMap<>(); //ImageId | PlayerId
 	
 	public Map<Integer, Integer> currentImageGuesses = new HashMap<>(); //ImageId | PlayerId
 	
@@ -46,12 +48,9 @@ public class GameServer {
 		if(p == null)
 			return false;
 		
-		Integer imageId = p.imageSlots.get(imageSlot);
+		Integer imageId = p.imageSlots.get(imageSlot).imageId;
 		
-		if(imageId == null)
-			return false;
-		
-		currentImages.put(imageId, playerId);
+		currentImages.put(imagesById.get(imageId), playerId);
 		
 		p.imageSlots.put(imageSlot, null);
 		
@@ -96,7 +95,7 @@ public class GameServer {
 		return currentPlayer - 1;
 	}
 	
-	public synchronized Map<Integer, Integer> requestNewImages(Integer playerId) {
+	public synchronized Map<Integer, PiXitImage> requestNewImages(Integer playerId) {
 		Player player = players.get(playerId);
 		
 		for(int i = 0; i < Settings.IMAGE_COUNT; i++) {
@@ -105,7 +104,7 @@ public class GameServer {
 			
 			int newImage = rand.nextInt(freeImages.size());
 			
-			Integer image = freeImages.get(newImage);
+			PiXitImage image = freeImages.get(newImage);
 			freeImages.remove(newImage);
 			
 			player.imageSlots.put(i, image);
@@ -129,7 +128,7 @@ public class GameServer {
 	private void processAllImagesPlayed() {
 		currentImageGuesses.clear();
 		
-		List<Integer> images = new ArrayList<>(currentImages.keySet());
+		List<PiXitImage> images = new ArrayList<>(currentImages.keySet());
 		Collections.shuffle(images);
 		
 		for(int i = 0; i < players.size(); i++) {
@@ -144,7 +143,7 @@ public class GameServer {
 	
 	private void processAllImagesGuessed() {
 	
-		int correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey();
+		int correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey().imageId;
 		
 		int numCorrectGuess = 0;
 		
@@ -155,7 +154,7 @@ public class GameServer {
 				players.get(guess.getValue()).points += Settings.POINTS_CORRECT_GUESS;
 			}
 			else {
-				int playerImageOriginator = currentImages.get(guess.getKey());
+				int playerImageOriginator = currentImages.get(imagesById.get(guess.getKey()));
 				if(playerImageOriginator != guess.getValue())
 					players.get(playerImageOriginator).points += Settings.POINTS_GUESSED;
 			}

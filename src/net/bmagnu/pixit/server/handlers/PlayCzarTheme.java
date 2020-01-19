@@ -2,9 +2,9 @@ package net.bmagnu.pixit.server.handlers;
 
 import com.google.gson.JsonObject;
 
-import net.bmagnu.pixit.common.Settings;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
+import net.bmagnu.pixit.server.Settings;
 
 public class PlayCzarTheme implements ClientMessageHandler {
 

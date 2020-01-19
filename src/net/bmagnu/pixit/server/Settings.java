@@ -1,4 +1,4 @@
-package net.bmagnu.pixit.common;
+package net.bmagnu.pixit.server;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

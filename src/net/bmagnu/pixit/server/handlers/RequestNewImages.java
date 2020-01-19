@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import net.bmagnu.pixit.common.PiXitImage;
 import net.bmagnu.pixit.server.ClientMessageHandler;
 import net.bmagnu.pixit.server.GameServer;
 
@@ -17,15 +18,16 @@ public class RequestNewImages implements ClientMessageHandler {
 		
 		JsonObject json = new JsonObject();
 		
-		Map<Integer, Integer> imageSlots = server.requestNewImages(playerId);
+		Map<Integer, PiXitImage> imageSlots = server.requestNewImages(playerId);
 		
 		JsonArray slots = new JsonArray();
 		
-		for(Entry<Integer, Integer> imageSlot : imageSlots.entrySet()) {
+		for(Entry<Integer, PiXitImage> imageSlot : imageSlots.entrySet()) {
 			JsonObject currentSlot = new JsonObject();
 			
 			currentSlot.addProperty("slot", imageSlot.getKey());
-			currentSlot.addProperty("image", imageSlot.getValue());
+			currentSlot.addProperty("image", imageSlot.getValue().imageId);
+			currentSlot.addProperty("hash", imageSlot.getValue().hash);
 			
 			slots.add(currentSlot);
 		}

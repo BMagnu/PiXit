@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 
 import net.bmagnu.pixit.client.Client;
+import net.bmagnu.pixit.client.PiXitImageRequest;
 import net.bmagnu.pixit.client.ServerMessageHandler;
 import net.bmagnu.pixit.common.GameState;
 
@@ -14,7 +15,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 	public void handle(JsonObject data) {
 		Integer id = data.get("state").getAsInt();
 		GameState state = GameState.deserialize(id);
-		Map<Integer, Integer> images = null;
+		Map<Integer, PiXitImageRequest> images = null;
 		
 		switch (state) {
 			case STATE_WAITING_FOR_CARDS :

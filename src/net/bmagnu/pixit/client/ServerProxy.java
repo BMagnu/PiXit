@@ -1,8 +1,11 @@
 package net.bmagnu.pixit.client;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +31,7 @@ public class ServerProxy {
 		return toSend.toString();
 	}
 	
-	public Map<Integer, Integer> requestNewImages(){
+	public Map<Integer, PiXitImageRequest> requestNewImages(){
 		JsonObject request = new JsonObject();
 		request.addProperty("playerId", connection.playerId);
 		
@@ -40,11 +43,16 @@ public class ServerProxy {
 			if(response.get("success").getAsBoolean()) {
 				
 				JsonArray slots = (JsonArray) response.get("slots");
-				Map<Integer, Integer> imageSlots = new HashMap<>();
+				Map<Integer, PiXitImageRequest> imageSlots = new HashMap<>();
 				
 				for(JsonElement slotO : slots) {
 					JsonObject slot = (JsonObject) slotO;
-					imageSlots.put(slot.get("slot").getAsInt(), slot.get("image").getAsInt());
+					
+					PiXitImageRequest image = new PiXitImageRequest();
+					image.id = slot.get("image").getAsInt();
+					image.hash = slot.get("hash").getAsString();
+					
+					imageSlots.put(slot.get("slot").getAsInt(), image);
 				}
 				
 				return imageSlots;
@@ -116,10 +124,10 @@ public class ServerProxy {
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	public Image loadImage(int imageId) {
+	public Image loadImage(PiXitImageRequest imageReq) {
 		
 		JsonObject request = new JsonObject();
-		request.addProperty("id", imageId);
+		request.addProperty("id", imageReq.id);
 		
 		String json = buildJson(request, "loadImage");
 		
@@ -127,9 +135,18 @@ public class ServerProxy {
 			JsonObject response = connection.sendWaitForResponse(json);
 			
 			if(response.get("success").getAsBoolean()) {
-				InputStream imageStream = new ByteArrayInputStream(Base64.getDecoder().decode(response.get("image").getAsString()));
+				byte [] imageData = Base64.getDecoder().decode(response.get("image").getAsString());
+				InputStream imageStream = new ByteArrayInputStream(imageData);
 				Image image = new Image(imageStream);
 				imageStream.close();
+				
+				if (Client.instance.cacheImages) {
+					File imageCacheFile = new File("./cache/" + imageReq.hash);
+				    OutputStream outStream = new FileOutputStream(imageCacheFile);
+				    outStream.write(imageData);
+				    outStream.close();
+				}
+
 				return image;
 			}
 			else

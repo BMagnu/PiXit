@@ -6,11 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import net.bmagnu.pixit.common.Settings;
+import net.bmagnu.pixit.common.PiXitImage;
 
 public class Server {
 
@@ -75,12 +76,24 @@ public class Server {
 			return false;
 		}).forEachOrdered((file) -> {
 			int imageCount = server.images.size();
-			server.freeImages.add(imageCount);
+			
+			try {
+				PiXitImage image = new PiXitImage(PiXitImage.makeHash(file.toFile()), imageCount);
+				
+				server.imagesById.put(imageCount, image);
+				server.freeImages.add(image);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+
 			server.images.put(imageCount, file.toFile().getAbsolutePath());
 		});
 		
-		for(String file : server.images.values()) {
-			System.out.println("Image: " + file);
+		for(Entry<Integer, String> file : server.images.entrySet()) {
+			System.out.println("Image " + file.getKey() + ": " + file.getValue());
+			System.out.println("With Hash " + server.imagesById.get(file.getKey()).hash);
+			System.out.println();
 		}
 	}
 
