@@ -30,7 +30,7 @@ public class Settings {
 		
 		boolean ALLOW_EMPTY_THEME_Loc = false;
 		int PORT_SERVER_Loc = 53415;
-		short NUM_PLAYERS_TO_START_Loc = 2;
+		short NUM_PLAYERS_TO_START_Loc = 4;
 		
 		short POINTS_CORRECT_GUESS_Loc = 3;
 		short POINTS_GOOD_CZAR_Loc = 2;
@@ -41,7 +41,7 @@ public class Settings {
 		
 		short POST_ROUND_WAIT_Loc = 5000;
 		
-		boolean OPEN_PORT_UPNP_Loc = true;
+		boolean OPEN_PORT_UPNP_Loc = false;
 		
 		if(loadFromFile) {
 			try {

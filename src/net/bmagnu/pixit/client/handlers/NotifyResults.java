@@ -28,7 +28,6 @@ public class NotifyResults implements ServerMessageHandler {
 		Client.instance.controller.setInfoBox("All players have guessed! This was the correct image!");
 		Client.instance.controller.setPlayersPoints(playerPoints);
 		System.out.println("Correct Image was " + correctImg);
-		//TODO proper Correct Image Highlighting
 	}
 	
 }
