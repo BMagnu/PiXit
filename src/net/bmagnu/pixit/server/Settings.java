@@ -23,6 +23,8 @@ public class Settings {
 	
 	public static final short POST_ROUND_WAIT;
 	
+	public static final boolean OPEN_PORT_UPNP;
+	
 	static {
 		//Load Config from File
 		
@@ -38,6 +40,8 @@ public class Settings {
 		short IMAGE_COUNT_Loc = 7;
 		
 		short POST_ROUND_WAIT_Loc = 5000;
+		
+		boolean OPEN_PORT_UPNP_Loc = true;
 		
 		if(loadFromFile) {
 			try {
@@ -57,6 +61,8 @@ public class Settings {
 				IMAGE_COUNT_Loc = jsonIn.get("imagesPerPlayer").getAsShort();
 				
 				POST_ROUND_WAIT_Loc = jsonIn.get("postRoundWait").getAsShort();
+				
+				OPEN_PORT_UPNP_Loc = jsonIn.get("openPortUPnP").getAsBoolean();
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -74,6 +80,8 @@ public class Settings {
 		IMAGE_COUNT = IMAGE_COUNT_Loc; 
 		
 		POST_ROUND_WAIT = POST_ROUND_WAIT_Loc;
+		
+		OPEN_PORT_UPNP = OPEN_PORT_UPNP_Loc;
 	}
 	
 	

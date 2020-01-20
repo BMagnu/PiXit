@@ -11,6 +11,8 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
+import com.dosse.upnp.UPnP;
+
 import net.bmagnu.pixit.common.PiXitImage;
 
 public class Server {
@@ -36,6 +38,11 @@ public class Server {
 		server = new GameServer();
 		System.out.println("GameServer started!");
 		socket = new ServerSocket(Settings.PORT_SERVER);
+		if(Settings.OPEN_PORT_UPNP) {
+			boolean portOpen = UPnP.openPortTCP(Settings.PORT_SERVER);
+			System.out.println(portOpen ? "Opened Port " + Settings.PORT_SERVER + " via UPnP" : "Opening of Port " + Settings.PORT_SERVER + " via UPnP failed");
+		}
+			
 		clients = new ArrayList<>();
 		
 		initImages(imgPath);

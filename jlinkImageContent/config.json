@@ -7,5 +7,6 @@
 	"pointsGotGuessed" : 1,
 	"minimumCzarDelta" : 1,
 	"imagesPerPlayer" : 7,
-	"postRoundWait" : 5000
+	"postRoundWait" : 5000,
+	"openPortUPnP" : true
 }
