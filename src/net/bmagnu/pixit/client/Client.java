@@ -93,7 +93,7 @@ public class Client extends Application {
 		}
 		
 		System.out.println("Registering at Server...");
-		connection.playerId = proxy.registerPlayer();
+		connection.playerId = proxy.registerPlayer(name);
 		System.out.println("Player Id: " + connection.playerId);
 	}
 	

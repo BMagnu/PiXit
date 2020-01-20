@@ -1,6 +1,8 @@
 package net.bmagnu.pixit.server;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -41,10 +43,22 @@ public class ClientProxy {
 		client.send(buildJson(request, "images"));
 	}
 	
-	public void notifyResults(int correctImage, int points) {
+	public void notifyResults(int correctImage, int points, Map<String, Integer> pointsPlayers) {
 		JsonObject request = new JsonObject();
 		request.addProperty("correctImageId", correctImage);
 		request.addProperty("totalPoints", points);
+		
+		JsonArray pointsArray = new JsonArray();
+		
+		for(Entry<String, Integer> point : pointsPlayers.entrySet()) {
+			JsonObject pointsJson = new JsonObject();
+			pointsJson.addProperty("player", point.getKey());
+			pointsJson.addProperty("points", point.getValue());
+			
+			pointsArray.add(pointsJson);
+		}
+		
+		request.add("points", pointsArray);
 		
 		client.send(buildJson(request, "results"));
 	}

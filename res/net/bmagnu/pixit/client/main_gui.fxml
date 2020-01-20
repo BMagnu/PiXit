@@ -36,7 +36,7 @@
 				<StackPane>
 					<children>
 						<VBox maxHeight="-Infinity" maxWidth="-Infinity"
-							spacing="20.0" />
+							spacing="20.0" fx:id="nameList" alignment="CENTER" />
 					</children>
 				</StackPane>
 				<StackPane prefHeight="150.0" prefWidth="200.0"

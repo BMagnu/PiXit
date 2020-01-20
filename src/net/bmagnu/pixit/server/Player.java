@@ -9,6 +9,8 @@ public class Player {
 	
 	public Integer playerId;
 	
+	public String name;
+	
 	public Map<Integer, PiXitImage> imageSlots; //ImageSlot | ImageId
 	
 	public int points;

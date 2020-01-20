@@ -116,6 +116,17 @@ public class GameServer {
 	private void processInitialization() {
 		currentPlayer = 0;
 		
+		Map<String, Integer> points = new HashMap<>();
+		int anonCnt = 0;
+		for(int i = 0; i < players.size(); i++) {
+			String playerName = players.get(i).name.isBlank() ? "Anon " + (++anonCnt) : players.get(i).name;
+			points.put(playerName, players.get(i).points);
+		}
+		
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).proxy.notifyResults(-1, players.get(i).points, points);
+		}
+		
 		//Send each player all player info
 		for(int i = 0; i < players.size(); i++) {
 			if(i == currentPlayer) 
@@ -170,8 +181,15 @@ public class GameServer {
 			e.printStackTrace();
 		}
 		
+		Map<String, Integer> points = new HashMap<>();
+		int anonCnt = 0;
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyResults(correctImage, players.get(i).points);
+			String playerName = players.get(i).name.isBlank() ? "Anon " + (++anonCnt) : players.get(i).name;
+			points.put(playerName, players.get(i).points);
+		}
+		
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).proxy.notifyResults(correctImage, players.get(i).points, points);
 		}
 		
 		currentPlayer++;

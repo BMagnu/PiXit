@@ -3,6 +3,7 @@ package net.bmagnu.pixit.client;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +28,11 @@ public class GUIController {
 	
 	@FXML
 	private VBox czarBox;
+	
+	@FXML
+	private VBox nameList;
+	
+	private Map<String, Label> nameListMap = new HashMap<>();
 	
 	@FXML
 	private Label czarTheme;
@@ -141,6 +147,20 @@ public class GUIController {
 	
 	public void setPoints(Integer points) {
 		pointsLabel.setText("Points: " + points);
+	}
+	
+	public void setPlayersPoints(Map<String, Integer> points) {
+		for(Entry<String, Integer> player : points.entrySet()) {
+			Label playerLabel = nameListMap.get(player.getKey());
+			
+			if (playerLabel == null) {
+				playerLabel = new Label();
+				nameListMap.put(player.getKey(), playerLabel);
+				nameList.getChildren().add(playerLabel);
+			}
+			
+			playerLabel.setText(player.getKey() + ": " + player.getValue());
+		}
 	}
 	
 	public void highlightImage(int imageSlot) {
