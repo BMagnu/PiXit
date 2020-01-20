@@ -205,26 +205,34 @@ public class GUIController {
 		}
 	}
 	
-	public void setNewImages(Map<Integer, PiXitImageRequest> imageId) {
+	public void setNewImagesCleanup(Map<Integer, PiXitImageRequest> imageId) {
 		for(int i = 0; i < 7; i++) {
 			if(imageId.size() <= i || imageId.get(i) == null) {
-				//No Img
+				//No Img				
 				imageSlots[i].setVisible(false);
+				imageSlots[i].setImage(null);
+				
+				imageCache.remove(this.imageId[i]);
 				this.imageId[i] = -1;
+				
 			}
 			else if(imageId.get(i).id != this.imageId[i]) {
 				//New Img
+				
 				imageSlots[i].setVisible(true);
 				imageSlots[i].setOpacity(1);
 				
-				this.imageId[i] = imageId.get(i).id;
 				Image image = loadImage(imageId.get(i));
-				
 				imageSlots[i].setImage(image);
+				
+				imageCache.remove(this.imageId[i]);
+				
+				this.imageId[i] = imageId.get(i).id;
 			}
-			//else {
+			else {
+				imageSlots[i].setOpacity(1);
 				//Keep Img
-			//}
+			}
 		}
 	}
 }

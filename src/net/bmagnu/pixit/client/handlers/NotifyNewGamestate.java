@@ -25,7 +25,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 			case STATE_WAITING_FOR_CZAR :
 				images = Client.instance.proxy.requestNewImages();
 				
-				Client.instance.controller.setNewImages(images);
+				Client.instance.controller.setNewImagesCleanup(images);
 				Client.instance.controller.showCzarBox(false);
 				Client.instance.controller.setCzarTheme("");
 				Client.instance.controller.setInfoBox("Waiting for the round master to set the round's theme!");
@@ -33,7 +33,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 			case STATE_WAITING_FOR_CZAR_YOU :
 				images = Client.instance.proxy.requestNewImages();
 				
-				Client.instance.controller.setNewImages(images);
+				Client.instance.controller.setNewImagesCleanup(images);
 				Client.instance.controller.showCzarBox(true);
 				Client.instance.controller.setInfoBox("You are the round master! Set this round's theme!");
 				break;
