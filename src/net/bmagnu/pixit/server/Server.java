@@ -1,10 +1,18 @@
 package net.bmagnu.pixit.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.net.SocketException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingDeque;
@@ -46,6 +54,8 @@ public class Server {
 		clients = new ArrayList<>();
 		
 		initImages(imgPath);
+
+		printIPAddr();
 		
 		Thread socketAcceptor = new Thread(() -> {
 			System.out.println("ServerSocket started!");
@@ -68,6 +78,47 @@ public class Server {
 				task.run();
 			}
 		}
+	}
+
+	private void printIPAddr() throws SocketException {
+		
+		System.out.println("Local IPs:");
+		
+		Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+		while(networkInterfaces.hasMoreElements())
+		{
+		    NetworkInterface networkInterface = (NetworkInterface) networkInterfaces.nextElement();
+		    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+		    while (inetAddresses.hasMoreElements())
+		    {
+		        InetAddress inetAddress = (InetAddress) inetAddresses.nextElement();
+		        if (inetAddress instanceof Inet4Address && !inetAddress.isLoopbackAddress())
+		        System.out.println(inetAddress.getHostAddress());
+		    }
+		}
+
+		System.out.println();
+		
+		BufferedReader ipProviderData = null;
+		try {
+			URL ipProviderURL = new URL("http://checkip.amazonaws.com");
+        
+            ipProviderData = new BufferedReader(new InputStreamReader(ipProviderURL.openStream()));
+            String ip = ipProviderData.readLine();
+            System.out.println("Global IP:");
+            System.out.println(ip);
+            System.out.println();
+        } catch (IOException e) {
+			System.out.println("Couldn't Query Global IP");
+		} finally {
+            if (ipProviderData != null) {
+                try {
+                    ipProviderData.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 	}
 	
 	private void initImages(String path) throws IOException {

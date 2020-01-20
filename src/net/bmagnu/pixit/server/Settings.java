@@ -64,7 +64,7 @@ public class Settings {
 				
 				OPEN_PORT_UPNP_Loc = jsonIn.get("openPortUPnP").getAsBoolean();
 			} catch(Exception e) {
-				e.printStackTrace();
+				System.out.println("Could not Load Config File, assuming Defaults");
 			}
 		}
 		
