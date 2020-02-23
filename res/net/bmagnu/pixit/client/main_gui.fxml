@@ -16,8 +16,7 @@
 	maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
 	minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0"
 	xmlns:fx="http://javafx.com/fxml/1"
-	xmlns="http://javafx.com/javafx/8.0.171"
-	stylesheets="@style.css">
+	xmlns="http://javafx.com/javafx/8.0.171" stylesheets="@style.css">
 	<children>
 		<GridPane gridLinesVisible="true">
 			<columnConstraints>
@@ -45,131 +44,138 @@
 						<Label fx:id="pointsLabel" text="Points: 0" />
 					</children>
 				</StackPane>
-				<GridPane hgap="10.0" vgap="10.0" GridPane.columnIndex="1">
-					<GridPane.margin>
-						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-					</GridPane.margin>
-					<columnConstraints>
-						<ColumnConstraints hgrow="SOMETIMES"
-							minWidth="10.0" prefWidth="100.0" />
-						<ColumnConstraints hgrow="SOMETIMES"
-							minWidth="10.0" prefWidth="100.0" />
-						<ColumnConstraints hgrow="SOMETIMES"
-							minWidth="10.0" prefWidth="100.0" />
-						<ColumnConstraints hgrow="SOMETIMES"
-							minWidth="10.0" prefWidth="100.0" />
-					</columnConstraints>
-					<rowConstraints>
-						<RowConstraints minHeight="10.0" prefHeight="30.0"
-							vgrow="SOMETIMES" />
-						<RowConstraints minHeight="10.0" prefHeight="30.0"
-							vgrow="SOMETIMES" />
-					</rowConstraints>
+				
+				<StackPane GridPane.columnIndex="1">
 					<children>
-						<StackPane minWidth="0.0" minHeight="0.0"
-							GridPane.columnIndex="3" GridPane.rowIndex="1">
+						<GridPane fx:id="mainGrid" hgap="10.0" vgap="10.0"
+							GridPane.columnIndex="1">
+							<GridPane.margin>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</GridPane.margin>
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="10.0" prefWidth="100.0" />
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="10.0" prefWidth="100.0" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints minHeight="10.0"
+									prefHeight="30.0" vgrow="SOMETIMES" />
+								<RowConstraints minHeight="10.0"
+									prefHeight="30.0" vgrow="SOMETIMES" />
+							</rowConstraints>
 							<children>
-								<VBox fx:id="czarBox" alignment="CENTER" prefHeight="200.0"
-									prefWidth="100.0" visible="false">
+								<StackPane minWidth="0.0" minHeight="0.0"
+									GridPane.columnIndex="3" GridPane.rowIndex="1">
 									<children>
-										<TextField fx:id="czarThemeTextfield">
-											<VBox.margin>
-												<Insets bottom="10.0" left="20.0" right="20.0"
-													top="10.0" />
-											</VBox.margin>
-										</TextField>
-										<Button mnemonicParsing="false" prefHeight="25.0"
-											prefWidth="200.0" text="Submit Theme"
-											onAction="#handleCzarThemeSubmit">
-											<VBox.margin>
-												<Insets bottom="10.0" left="10.0" right="10.0"
-													top="10.0" />
-											</VBox.margin>
-										</Button>
+										<VBox fx:id="czarBox" alignment="CENTER"
+											prefHeight="200.0" prefWidth="100.0" visible="false">
+											<children>
+												<TextField fx:id="czarThemeTextfield">
+													<VBox.margin>
+														<Insets bottom="10.0" left="20.0" right="20.0"
+															top="10.0" />
+													</VBox.margin>
+												</TextField>
+												<Button mnemonicParsing="false" prefHeight="25.0"
+													prefWidth="200.0" text="Submit Theme"
+													onAction="#handleCzarThemeSubmit">
+													<VBox.margin>
+														<Insets bottom="10.0" left="10.0" right="10.0"
+															top="10.0" />
+													</VBox.margin>
+												</Button>
+											</children>
+										</VBox>
+										<Label fx:id="czarTheme" text="" />
 									</children>
-								</VBox>
-								<Label fx:id="czarTheme" text="" />
+								</StackPane>
+								<StackPane fx:id="imgpane1" GridPane.columnIndex="0"
+									GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="1">
+									<children>
+										<ImageView fx:id="img1" fitWidth="${imgpane1.width}"
+											fitHeight="${imgpane1.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane2" GridPane.columnIndex="1"
+									GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="2">
+									<children>
+										<ImageView fx:id="img2" fitWidth="${imgpane2.width}"
+											fitHeight="${imgpane2.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane3" GridPane.columnIndex="2"
+									GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="3">
+									<children>
+										<ImageView fx:id="img3" fitWidth="${imgpane3.width}"
+											fitHeight="${imgpane3.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane4" GridPane.columnIndex="3"
+									GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="4">
+									<children>
+										<ImageView fx:id="img4" fitWidth="${imgpane4.width}"
+											fitHeight="${imgpane4.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane5" GridPane.columnIndex="0"
+									GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="5">
+									<children>
+										<ImageView fx:id="img5" fitWidth="${imgpane5.width}"
+											fitHeight="${imgpane5.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane6" GridPane.columnIndex="1"
+									GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="6">
+									<children>
+										<ImageView fx:id="img6" fitWidth="${imgpane6.width}"
+											fitHeight="${imgpane6.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
+								<StackPane fx:id="imgpane7" GridPane.columnIndex="2"
+									GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
+									onMouseClicked="#handleOnImageClicked"
+									onMouseEntered="#handleMouseEnter"
+									onMouseExited="#handleMouseExit" userData="7">
+									<children>
+										<ImageView fx:id="img7" fitWidth="${imgpane7.width}"
+											fitHeight="${imgpane7.height}" pickOnBounds="true"
+											preserveRatio="true" />
+									</children>
+								</StackPane>
 							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane1" GridPane.columnIndex="0"
-							GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="1">
-							<children>
-								<ImageView fx:id="img1" fitWidth="${imgpane1.width}"
-									fitHeight="${imgpane1.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane2" GridPane.columnIndex="1"
-							GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="2">
-							<children>
-								<ImageView fx:id="img2" fitWidth="${imgpane2.width}"
-									fitHeight="${imgpane2.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane3" GridPane.columnIndex="2"
-							GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="3">
-							<children>
-								<ImageView fx:id="img3" fitWidth="${imgpane3.width}"
-									fitHeight="${imgpane3.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane4" GridPane.columnIndex="3"
-							GridPane.rowIndex="0" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="4">
-							<children>
-								<ImageView fx:id="img4" fitWidth="${imgpane4.width}"
-									fitHeight="${imgpane4.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane5" GridPane.columnIndex="0"
-							GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="5">
-							<children>
-								<ImageView fx:id="img5" fitWidth="${imgpane5.width}"
-									fitHeight="${imgpane5.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane6" GridPane.columnIndex="1"
-							GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="6">
-							<children>
-								<ImageView fx:id="img6" fitWidth="${imgpane6.width}"
-									fitHeight="${imgpane6.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="imgpane7" GridPane.columnIndex="2"
-							GridPane.rowIndex="1" minWidth="0.0" minHeight="0.0"
-							onMouseClicked="#handleOnImageClicked"
-							onMouseEntered="#handleMouseEnter"
-							onMouseExited="#handleMouseExit" userData="7">
-							<children>
-								<ImageView fx:id="img7" fitWidth="${imgpane7.width}"
-									fitHeight="${imgpane7.height}" pickOnBounds="true"
-									preserveRatio="true" />
-							</children>
-						</StackPane>
+						</GridPane>
+						<Label fx:id="mainLabel" text="" />
 					</children>
-				</GridPane>
+				</StackPane>
 				<StackPane GridPane.rowIndex="1" GridPane.columnIndex="1">
 					<children>
 						<Label fx:id="infoBox" text="Initializing..." />

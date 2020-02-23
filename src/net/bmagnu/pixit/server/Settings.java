@@ -25,6 +25,8 @@ public class Settings {
 	
 	public static final boolean OPEN_PORT_UPNP;
 	
+	public static final boolean PLAY_FULL_ROUNDS;
+	
 	static {
 		//Load Config from File
 		
@@ -42,6 +44,8 @@ public class Settings {
 		short POST_ROUND_WAIT_Loc = 5000;
 		
 		boolean OPEN_PORT_UPNP_Loc = false;
+		
+		boolean PLAY_FULL_ROUNDS_Loc = false;
 		
 		if(loadFromFile) {
 			try {
@@ -63,6 +67,8 @@ public class Settings {
 				POST_ROUND_WAIT_Loc = jsonIn.get("postRoundWait").getAsShort();
 				
 				OPEN_PORT_UPNP_Loc = jsonIn.get("openPortUPnP").getAsBoolean();
+				
+				PLAY_FULL_ROUNDS_Loc = jsonIn.get("playFullRounds").getAsBoolean();
 			} catch(Exception e) {
 				System.out.println("Could not Load Config File, assuming Defaults");
 			}
@@ -82,6 +88,8 @@ public class Settings {
 		POST_ROUND_WAIT = POST_ROUND_WAIT_Loc;
 		
 		OPEN_PORT_UPNP = OPEN_PORT_UPNP_Loc;
+		
+		PLAY_FULL_ROUNDS = PLAY_FULL_ROUNDS_Loc;
 	}
 	
 	

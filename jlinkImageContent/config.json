@@ -8,5 +8,6 @@
 	"minimumCzarDelta" : 1,
 	"imagesPerPlayer" : 7,
 	"postRoundWait" : 5000,
-	"openPortUPnP" : true
+	"openPortUPnP" : true,
+	"playFullRounds" : true
 }

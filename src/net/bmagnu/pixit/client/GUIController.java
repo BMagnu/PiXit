@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import net.bmagnu.pixit.common.GameState;
@@ -55,6 +56,12 @@ public class GUIController {
 	@FXML
 	private StackPane hoverBorder;
 	
+	@FXML
+	private GridPane mainGrid;
+	
+	@FXML
+	private Label mainLabel;
+	
 	@FXML 
 	protected void handleCzarThemeSubmit(ActionEvent event) {
 		//Clicked Submit Theme Button
@@ -85,6 +92,7 @@ public class GUIController {
 				case STATE_WAITING_FOR_CZAR_YOU :
 				case STATE_WAITING_FOR_GUESS_CZAR:
 				case STATE_WAITING_FOR_PLAYERS:
+				case STATE_GAME_OVER:
 					System.out.println("Can't click Images as Czar / while Czar is choosing the Theme");
 					break;
         	}
@@ -130,6 +138,9 @@ public class GUIController {
 		
 		hoverPane.setVisible(false);
 		hoverPane.setMouseTransparent(true);
+		
+		mainLabel.setVisible(false);
+		mainLabel.setMouseTransparent(true);
 	}
 	
 	public void showCzarBox(boolean show) {
@@ -147,6 +158,16 @@ public class GUIController {
 	
 	public void setPoints(Integer points) {
 		pointsLabel.setText("Points: " + points);
+	}
+	
+	public void setMainText(String text) {
+		boolean isBlank = text.isBlank();
+		
+		mainLabel.setText(text);
+		mainLabel.setVisible(!isBlank);
+			
+		mainGrid.setVisible(isBlank);
+		mainGrid.setMouseTransparent(!isBlank);
 	}
 	
 	public void setPlayersPoints(Map<String, Integer> points) {
