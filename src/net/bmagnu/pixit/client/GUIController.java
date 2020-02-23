@@ -81,12 +81,22 @@ public class GUIController {
 				case STATE_WAITING_FOR_CARDS :
 					Client.instance.state = GameState.STATE_WAITING_FOR_PLAYERS; //Can't submit more than once
 					highlightImage(imageSlot);
-					Client.instance.proxy.playImage(imageSlot);
+					try {
+						Client.instance.proxy.playImage(imageSlot);
+					} catch(IllegalArgumentException e) {
+						Client.instance.state = GameState.STATE_WAITING_FOR_CARDS;
+						highlightImage(-1);
+					}
 					break;
 				case STATE_WAITING_FOR_GUESS :
 					Client.instance.state = GameState.STATE_WAITING_FOR_PLAYERS; //Can't guess more than once
 					highlightImage(imageSlot);
-					Client.instance.proxy.playImageGuess(imageId[imageSlot]);
+					try {
+						Client.instance.proxy.playImageGuess(imageId[imageSlot]);
+					} catch(IllegalArgumentException e) {
+						Client.instance.state = GameState.STATE_WAITING_FOR_GUESS;
+						highlightImage(-1);
+					}
 					break;
 				case STATE_WAITING_FOR_CZAR :
 				case STATE_WAITING_FOR_CZAR_YOU :
@@ -186,6 +196,14 @@ public class GUIController {
 	
 	public void highlightImage(int imageSlot) {
 		for(int i = 0; i < 7; i++) {
+			if(imageSlot == -1) {
+				if(imageId[i] == -1)
+					continue;
+				
+				imageSlots[i].setOpacity(1);
+				continue;
+			}
+			
 			if(imageId[i] == -1)
 				continue;
 			

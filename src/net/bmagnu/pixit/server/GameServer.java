@@ -22,6 +22,8 @@ public class GameServer {
 	
 	public int currentPlayer = 0;
 	
+	public int rounds = 0;
+	
 	public List<Player> players = new ArrayList<>();
 	
 	public Map<PiXitImage, Integer> currentImages = new HashMap<>(); //ImageId | PlayerId
@@ -72,6 +74,9 @@ public class GameServer {
 		if(playerId == currentPlayer || p == null)
 			return false;
 		
+		if(imagesById.get(imageId) == null)
+			return false;
+		
 		currentImageGuesses.put(imageId, playerId);
 		
 		if(currentImageGuesses.size() >= players.size() - 1)
@@ -80,7 +85,7 @@ public class GameServer {
 		return true;
 	}
 	
-	public int registerPlayer(Player player) {
+	public synchronized int registerPlayer(Player player) {
 		if(players.size() >= Settings.NUM_PLAYERS_TO_START)
 			return -1;
 		
@@ -203,6 +208,23 @@ public class GameServer {
 			e.printStackTrace();
 		}
 
+		if(!Settings.PLAY_FULL_ROUNDS || currentPlayer == 0) {
+			int neededImages = Settings.PLAY_FULL_ROUNDS ? players.size() * players.size() : players.size();
+			
+			System.out.println(freeImages.size() + " Images left; " + neededImages + " needed");
+			
+			if(currentPlayer == 0)
+				rounds++;
+			
+			if(freeImages.size() < neededImages || rounds >= Settings.MAX_ROUNDS) {
+				for(int i = 0; i < players.size(); i++) {
+					players.get(i).proxy.notifyNewGamestate(GameState.STATE_GAME_OVER);
+				}
+				Server.addToQueue(() -> restartServer());
+				return;
+			}
+		}
+		
 		for(int i = 0; i < players.size(); i++) {
 			if(i == currentPlayer) 
 				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
@@ -216,5 +238,10 @@ public class GameServer {
 			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CARDS);
 			players.get(i).proxy.notifyTheme(theme);
 		}
+	}
+	
+	private void restartServer() {
+		//Server.shouldRestart = true;
+		Server.isRunning = false;
 	}
 }

@@ -51,5 +51,16 @@ public class ClientConnection extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("Player Disconnected");
+	}
+	
+	public void close() {
+		try {
+			socket.close();
+			this.join();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

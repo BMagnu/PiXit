@@ -27,7 +27,8 @@ public class Server {
 
 	public BlockingDeque<Runnable> execute = new LinkedBlockingDeque<>();
 	
-	public volatile boolean isRunning = true;
+	public static volatile boolean isRunning = true;
+	public static volatile boolean shouldRestart = false;
 	
 	public static Server instance;
 	
@@ -39,7 +40,10 @@ public class Server {
 	
 	public static void main(String[] args) throws InterruptedException, IOException {
 		instance = new Server();
-		instance.run(args.length > 0 ? args[0] : "./sample/");
+		do {
+			shouldRestart = false;
+			instance.run(args.length > 0 ? args[0] : "./sample/");
+		} while (shouldRestart);
 	}
 	
 	public void run(String imgPath) throws InterruptedException, IOException {
@@ -59,7 +63,7 @@ public class Server {
 		
 		Thread socketAcceptor = new Thread(() -> {
 			System.out.println("ServerSocket started!");
-			while(true) {
+			while(isRunning) {
 				try {
 					ClientConnection client = new ClientConnection(socket.accept(), server);
 					clients.add(client);
@@ -78,6 +82,12 @@ public class Server {
 				task.run();
 			}
 		}
+		
+		socket.close();
+		socketAcceptor.join();
+		
+		for(ClientConnection client : clients)
+			client.close();
 	}
 
 	private void printIPAddr() throws SocketException {

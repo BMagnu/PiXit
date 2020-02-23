@@ -47,6 +47,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 				break;
 			case STATE_GAME_OVER:
 				Client.instance.controller.setMainText("The game is over!");
+				Client.instance.controller.setInfoBox("");
 				break;
 			case STATE_WAITING_FOR_PLAYERS:
 				throw new IllegalArgumentException();

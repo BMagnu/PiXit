@@ -26,6 +26,7 @@ public class Settings {
 	public static final boolean OPEN_PORT_UPNP;
 	
 	public static final boolean PLAY_FULL_ROUNDS;
+	public static final int MAX_ROUNDS;
 	
 	static {
 		//Load Config from File
@@ -46,6 +47,7 @@ public class Settings {
 		boolean OPEN_PORT_UPNP_Loc = false;
 		
 		boolean PLAY_FULL_ROUNDS_Loc = false;
+		int MAX_ROUNDS_Loc = Integer.MAX_VALUE;
 		
 		if(loadFromFile) {
 			try {
@@ -69,6 +71,7 @@ public class Settings {
 				OPEN_PORT_UPNP_Loc = jsonIn.get("openPortUPnP").getAsBoolean();
 				
 				PLAY_FULL_ROUNDS_Loc = jsonIn.get("playFullRounds").getAsBoolean();
+				MAX_ROUNDS_Loc = jsonIn.get("maxRounds").getAsInt();
 			} catch(Exception e) {
 				System.out.println("Could not Load Config File, assuming Defaults");
 			}
@@ -90,6 +93,7 @@ public class Settings {
 		OPEN_PORT_UPNP = OPEN_PORT_UPNP_Loc;
 		
 		PLAY_FULL_ROUNDS = PLAY_FULL_ROUNDS_Loc;
+		MAX_ROUNDS = MAX_ROUNDS_Loc;
 	}
 	
 	

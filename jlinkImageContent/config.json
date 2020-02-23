@@ -1,13 +1,14 @@
 {
-	"allowEmptyTheme" : true,
-	"portServer" : 53415,
 	"numPlayers" : 4,
+	"imagesPerPlayer" : 7,
+	"playFullRounds" : true,
+	"maxRounds" : 3,
+	"allowEmptyTheme" : true,
 	"pointsCorrectGuess" : 3,
 	"pointsGoodCzar" : 2,
 	"pointsGotGuessed" : 1,
 	"minimumCzarDelta" : 1,
-	"imagesPerPlayer" : 7,
 	"postRoundWait" : 5000,
-	"openPortUPnP" : true,
-	"playFullRounds" : true
+	"portServer" : 53415,
+	"openPortUPnP" : true
 }
