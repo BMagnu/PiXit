@@ -77,7 +77,7 @@ public class GameServer {
 		if(imagesById.get(imageId) == null)
 			return false;
 		
-		currentImageGuesses.put(imageId, playerId);
+		currentImageGuesses.put(playerId, imageId);
 		
 		if(currentImageGuesses.size() >= players.size() - 1)
 			Server.addToQueue(() -> processAllImagesGuessed());
@@ -118,7 +118,7 @@ public class GameServer {
 		return player.imageSlots;
 	}
 	
-	private void processInitialization() {
+	protected void processInitialization() {
 		currentPlayer = 0;
 		
 		Map<String, Integer> points = new HashMap<>();
@@ -141,7 +141,7 @@ public class GameServer {
 		}
 	}
 	
-	private void processAllImagesPlayed() {
+	protected void processAllImagesPlayed() {
 		currentImageGuesses.clear();
 		
 		List<PiXitImage> images = new ArrayList<>(currentImages.keySet());
@@ -157,7 +157,7 @@ public class GameServer {
 		}
 	}
 	
-	private void processAllImagesGuessed() {
+	protected void processAllImagesGuessed() {
 	
 		int correctImage = currentImages.entrySet().stream().filter((entry) -> entry.getValue() == currentPlayer).findFirst().get().getKey().imageId;
 		
@@ -165,19 +165,19 @@ public class GameServer {
 		
 		for(Entry<Integer, Integer> guess : currentImageGuesses.entrySet()) {
 			//Guess Image | Player Guessed
-			if(guess.getKey() == correctImage) {
+			if(guess.getValue() == correctImage) {
 				numCorrectGuess++;
-				players.get(guess.getValue()).points += Settings.POINTS_CORRECT_GUESS;
+				players.get(guess.getKey()).points += Settings.POINTS_CORRECT_GUESS;
 			}
 			else {
-				int playerImageOriginator = currentImages.get(imagesById.get(guess.getKey()));
-				if(playerImageOriginator != guess.getValue())
+				int playerImageOriginator = currentImages.get(imagesById.get(guess.getValue()));
+				if(playerImageOriginator != guess.getKey())
 					players.get(playerImageOriginator).points += Settings.POINTS_GUESSED;
 			}
 			
 		}
 		
-		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && ((players.size() - 1) - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
+		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && (players.size() - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
 			players.get(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 		
 		try {
@@ -233,14 +233,14 @@ public class GameServer {
 		}
 	}
 	
-	private void processCzarTheme(String theme) {
+	protected void processCzarTheme(String theme) {
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CARDS);
 			players.get(i).proxy.notifyTheme(theme);
 		}
 	}
 	
-	private void restartServer() {
+	protected void restartServer() {
 		//Server.shouldRestart = true;
 		Server.isRunning = false;
 	}
