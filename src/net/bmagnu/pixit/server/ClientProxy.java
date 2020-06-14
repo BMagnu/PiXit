@@ -76,4 +76,13 @@ public class ClientProxy {
 		
 		client.send(buildJson(request, "gamestate"));
 	}
+	
+	public void notifyMiscInfo(String currentCzar, int deckCurrent, int deckMaximum) {
+		JsonObject request = new JsonObject();
+		request.addProperty("currentCzar", currentCzar);
+		request.addProperty("deckCurrent", deckCurrent);
+		request.addProperty("deckMax", deckMaximum);
+		
+		client.send(buildJson(request, "info"));
+	}
 }

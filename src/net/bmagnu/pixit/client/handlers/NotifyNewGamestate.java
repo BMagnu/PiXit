@@ -21,6 +21,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 			case STATE_WAITING_FOR_CARDS :
 				Client.instance.controller.showCzarBox(false);
 				Client.instance.controller.setInfoBox("Play a card that matches the round's theme!");
+				Client.instance.playSound("plop");
 				break;
 			case STATE_WAITING_FOR_CZAR :
 				images = Client.instance.proxy.requestNewImages();
@@ -36,10 +37,12 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 				Client.instance.controller.setNewImagesCleanup(images);
 				Client.instance.controller.showCzarBox(true);
 				Client.instance.controller.setInfoBox("You are the round master! Set this round's theme!");
+				Client.instance.playSound("swish");
 				break;
 			case STATE_WAITING_FOR_GUESS :
 				Client.instance.controller.showCzarBox(false);
 				Client.instance.controller.setInfoBox("Guess which card was played by the round master!");
+				Client.instance.playSound("plop");
 				break;
 			case STATE_WAITING_FOR_GUESS_CZAR :
 				Client.instance.controller.showCzarBox(false);

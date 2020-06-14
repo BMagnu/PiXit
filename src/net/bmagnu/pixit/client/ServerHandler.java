@@ -16,6 +16,7 @@ public class ServerHandler {
 		handlers.put("gamestate", new NotifyNewGamestate());
 		handlers.put("results", new NotifyResults());
 		handlers.put("theme", new NotifyTheme());
+		handlers.put("info", new NotifyMiscInfo());
 		
 		System.out.println("Created new ServerHandler with " + handlers.size() + " Handlers registered!");
 	}

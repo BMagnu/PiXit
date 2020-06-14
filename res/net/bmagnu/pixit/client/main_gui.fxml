@@ -41,7 +41,7 @@
 				<StackPane prefHeight="150.0" prefWidth="200.0"
 					GridPane.rowIndex="1">
 					<children>
-						<Label fx:id="pointsLabel" text="Points: 0" />
+						<Label fx:id="cardsLabel" text="Points: 0" />
 					</children>
 				</StackPane>
 				

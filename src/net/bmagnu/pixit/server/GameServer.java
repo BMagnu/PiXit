@@ -130,6 +130,7 @@ public class GameServer {
 		
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).proxy.notifyResults(-1, players.get(i).points, points);
+			players.get(i).proxy.notifyMiscInfo("", images.size(), images.size());
 		}
 		
 		//Send each player all player info
@@ -226,6 +227,8 @@ public class GameServer {
 		}
 		
 		for(int i = 0; i < players.size(); i++) {
+			players.get(i).proxy.notifyMiscInfo(players.get(currentPlayer).name, freeImages.size(), images.size());
+			
 			if(i == currentPlayer) 
 				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
 			else

@@ -42,7 +42,7 @@ public class GUIController {
 	private TextField czarThemeTextfield;
 	
 	@FXML
-	private Label pointsLabel;
+	private Label cardsLabel;
 	
 	@FXML
 	private Label infoBox;
@@ -166,8 +166,13 @@ public class GUIController {
 		infoBox.setText(info);
 	}
 	
+	@Deprecated
 	public void setPoints(Integer points) {
-		pointsLabel.setText("Points: " + points);
+		//pointsLabel.setText("Points: " + points);
+	}
+	
+	public void setDeckStats(Integer current, Integer max) {
+		cardsLabel.setText("Cards in Deck: " + current + " / " + max);
 	}
 	
 	public void setMainText(String text) {
@@ -191,6 +196,17 @@ public class GUIController {
 			}
 			
 			playerLabel.setText(player.getKey() + ": " + player.getValue());
+		}
+	}
+	
+	public void highlightPlayer(String player) {
+		for(Entry<String, Label> playerLabel : nameListMap.entrySet()) {
+
+			if (playerLabel.getKey().equals(player)) 
+				playerLabel.getValue().setStyle("-fx-font-weight: bold;");
+			else
+				playerLabel.getValue().setStyle("");
+			
 		}
 	}
 	

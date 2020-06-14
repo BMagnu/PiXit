@@ -9,11 +9,13 @@ import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.media.AudioClip;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
 import net.bmagnu.pixit.common.GameState;
 
 public class Client extends Application {
@@ -116,6 +118,11 @@ public class Client extends Application {
 			return null;
 		}
 
+	}
+	
+	public void playSound(String name) {
+		AudioClip sound = new AudioClip(getClass().getResource(name + ".wav").toString());
+		sound.play();
 	}
 	
 	@Override

@@ -14,7 +14,7 @@ public class NotifyResults implements ServerMessageHandler {
 
 	@Override
 	public void handle(JsonObject data) {
-		Integer points = data.get("totalPoints").getAsInt();
+		//Integer points = data.get("totalPoints").getAsInt();
 		Integer correctImg = data.get("correctImageId").getAsInt();
 		
 		Map<String, Integer> playerPoints = new HashMap<>();
@@ -23,7 +23,8 @@ public class NotifyResults implements ServerMessageHandler {
 			playerPoints.put(((JsonObject) point).get("player").getAsString(), ((JsonObject) point).get("points").getAsInt());
 		}
 		
-		Client.instance.controller.setPoints(points);
+		//No dedicated own points will be shown anymore
+		//Client.instance.controller.setPoints(points);
 		Client.instance.controller.highlightImageById(correctImg);
 		Client.instance.controller.setInfoBox("All players have guessed! This was the correct image!");
 		Client.instance.controller.setPlayersPoints(playerPoints);
