@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +75,24 @@ public class Server {
 			}
 		});
 		socketAcceptor.start();
+		
+		Thread consoleReader = new Thread(() -> {
+			Scanner scan = new Scanner(System.in);
+			DebugHandler handler = new DebugHandler(server, System.out);
+			try {
+				while(isRunning) {
+					String line = scan.nextLine();
+					handler.handleRecieveMessage(line);
+				}
+			} catch (Exception e) {}
+			finally {
+				try {
+				scan.close();
+				} catch (Exception e1) { }
+			}
+
+		});
+		consoleReader.start();
 		
 		while(isRunning) {
 			Runnable task = null;
