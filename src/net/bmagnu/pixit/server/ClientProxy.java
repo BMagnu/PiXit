@@ -85,4 +85,8 @@ public class ClientProxy {
 		
 		client.send(buildJson(request, "info"));
 	}
+
+	public void sendRaw(String command) {
+		client.send(command);
+	}
 }

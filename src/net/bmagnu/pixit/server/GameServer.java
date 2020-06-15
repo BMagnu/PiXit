@@ -28,7 +28,7 @@ public class GameServer {
 	
 	public Map<PiXitImage, Integer> currentImages = new HashMap<>(); //ImageId | PlayerId
 	
-	public Map<Integer, Integer> currentImageGuesses = new HashMap<>(); //ImageId | PlayerId
+	public Map<Integer, Integer> currentImageGuesses = new HashMap<>(); //PlayerId | ImageId
 	
 	private Random rand = new Random();
 	
@@ -101,6 +101,7 @@ public class GameServer {
 	}
 	
 	public synchronized Map<Integer, PiXitImage> requestNewImages(Integer playerId) {
+		//TODO Fix all player access by index
 		Player player = players.get(playerId);
 		
 		for(int i = 0; i < Settings.IMAGE_COUNT; i++) {
