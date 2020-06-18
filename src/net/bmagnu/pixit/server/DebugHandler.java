@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.bmagnu.pixit.server.commands.CommandKickPlayer;
 import net.bmagnu.pixit.server.commands.CommandMockClient;
 import net.bmagnu.pixit.server.commands.CommandSendClient;
 import net.bmagnu.pixit.server.commands.CommandShowState;
@@ -22,6 +23,7 @@ private static Map<String, DebugCommandHandler> handlers = new HashMap<>();
 		handlers.put("mockClient", new CommandMockClient());
 		handlers.put("sendClient", new CommandSendClient());
 		handlers.put("state", new CommandShowState());
+		handlers.put("kick", new CommandKickPlayer());
 		
 		System.out.println("Created new DebugHandler with " + handlers.size() + " Handlers registered!");
 	}

@@ -30,28 +30,28 @@ public class TestScoring {
 		p1.name = "A";
 		p1.playerId = 0;
 		p1.points = 0;
-		server.players.add(p1);
+		server.players.put("1", p1);
 		
 		p2 = new Player();
 		p2.proxy = mockedProxy;
 		p2.name = "B";
 		p2.playerId = 1;
 		p2.points = 0;
-		server.players.add(p2);
+		server.players.put("2", p2);
 		
 		p3 = new Player();
 		p3.proxy = mockedProxy;
 		p3.name = "C";
 		p3.playerId = 2;
 		p3.points = 0;
-		server.players.add(p3);
+		server.players.put("3", p3);
 		
 		p4 = new Player();
 		p4.proxy = mockedProxy;
 		p4.name = "D";
 		p4.playerId = 3;
 		p4.points = 0;
-		server.players.add(p4);
+		server.players.put("4", p4);
 		
 		PiXitImage img1 = new PiXitImage("", 0);
 		server.currentImages.put(img1, 0);
