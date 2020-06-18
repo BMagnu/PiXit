@@ -24,7 +24,7 @@ public class GameServer {
 	
 	public int rounds = 0;
 	
-	public List<Player> players = new ArrayList<>();
+	public Map<String, Player> players = new HashMap<>();
 	
 	public Map<PiXitImage, Integer> currentImages = new HashMap<>(); //ImageId | PlayerId
 	
@@ -39,13 +39,7 @@ public class GameServer {
 	}
 	
 	public boolean playImage(int imageSlot, Integer playerId) {
-		Player p = null;
-		for(Player player : players) {
-			if(player.playerId == playerId) {
-				p = player;
-				break;
-			}
-		}
+		Player p = findPlayerById(playerId);
 		
 		if(p == null)
 			return false;
@@ -63,13 +57,7 @@ public class GameServer {
 	}
 	
 	public boolean playImageGuess(int imageId, Integer playerId) {
-		Player p = null;
-		for(Player player : players) {
-			if(player.playerId == playerId) {
-				p = player;
-				break;
-			}
-		}
+		Player p = findPlayerById(playerId);
 		
 		if(playerId == currentPlayer || p == null)
 			return false;
@@ -85,14 +73,14 @@ public class GameServer {
 		return true;
 	}
 	
-	public synchronized int registerPlayer(Player player) {
+	public synchronized int registerPlayer(Player player, String id) {
 		if(players.size() >= Settings.NUM_PLAYERS_TO_START)
 			return -1;
 		
 		player.playerId = currentPlayer;
 		currentPlayer++;
 		
-		players.add(player);
+		players.put(id, player);
 		
 		if(players.size() >= Settings.NUM_PLAYERS_TO_START)
 			Server.addToQueue(() -> processInitialization());
@@ -100,9 +88,28 @@ public class GameServer {
 		return currentPlayer - 1;
 	}
 	
+	public synchronized int reconnectPlayer(Player player) {
+
+		player.proxy.notifyNewGamestate(gameState);
+		
+		Map<String, Integer> points = new HashMap<>();
+		int anonCnt = 0;
+		for(int i = 0; i < players.size(); i++) {
+			Player p = findPlayerById(i);
+			String playerName = p.name.isBlank() ? "Anon " + (++anonCnt) : p.name;
+			points.put(playerName, p.points);
+		}
+
+		player.proxy.notifyResults(-1, player.points, points);
+		player.proxy.notifyMiscInfo(findPlayerById(currentPlayer).name, freeImages.size(), images.size());
+		
+		
+		return player.playerId;
+	}
+	
 	public synchronized Map<Integer, PiXitImage> requestNewImages(Integer playerId) {
 		//TODO Fix all player access by index
-		Player player = players.get(playerId);
+		Player player = findPlayerById(playerId);
 		
 		for(int i = 0; i < Settings.IMAGE_COUNT; i++) {
 			if(player.imageSlots.get(i) != null)
@@ -125,21 +132,23 @@ public class GameServer {
 		Map<String, Integer> points = new HashMap<>();
 		int anonCnt = 0;
 		for(int i = 0; i < players.size(); i++) {
-			String playerName = players.get(i).name.isBlank() ? "Anon " + (++anonCnt) : players.get(i).name;
-			points.put(playerName, players.get(i).points);
+			Player p = findPlayerById(i);
+			String playerName = p.name.isBlank() ? "Anon " + (++anonCnt) : p.name;
+			points.put(playerName, p.points);
 		}
 		
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyResults(-1, players.get(i).points, points);
-			players.get(i).proxy.notifyMiscInfo("", images.size(), images.size());
+			Player p = findPlayerById(i);
+			p.proxy.notifyResults(-1, p.points, points);
+			p.proxy.notifyMiscInfo("", images.size(), images.size());
 		}
 		
 		//Send each player all player info
 		for(int i = 0; i < players.size(); i++) {
 			if(i == currentPlayer) 
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
+				findPlayerById(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
 			else
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR);
+				findPlayerById(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR);
 		}
 	}
 	
@@ -150,12 +159,14 @@ public class GameServer {
 		Collections.shuffle(images);
 		
 		for(int i = 0; i < players.size(); i++) {
+			Player p = findPlayerById(i);
+			
 			if(i != currentPlayer)
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
+				p.proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS);
 			else
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS_CZAR);
+				p.proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_GUESS_CZAR);
 				
-			players.get(i).proxy.notifyImages(images);
+			p.proxy.notifyImages(images);
 		}
 	}
 	
@@ -169,18 +180,18 @@ public class GameServer {
 			//Guess Image | Player Guessed
 			if(guess.getValue() == correctImage) {
 				numCorrectGuess++;
-				players.get(guess.getKey()).points += Settings.POINTS_CORRECT_GUESS;
+				findPlayerById(guess.getKey()).points += Settings.POINTS_CORRECT_GUESS;
 			}
 			else {
 				int playerImageOriginator = currentImages.get(imagesById.get(guess.getValue()));
 				if(playerImageOriginator != guess.getKey())
-					players.get(playerImageOriginator).points += Settings.POINTS_GUESSED;
+					findPlayerById(playerImageOriginator).points += Settings.POINTS_GUESSED;
 			}
 			
 		}
 		
 		if(numCorrectGuess > Settings.MIN_CZAR_DELTA && (players.size() - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
-			players.get(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
+			findPlayerById(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 		
 		try {
 			Thread.sleep(2500);
@@ -191,12 +202,14 @@ public class GameServer {
 		Map<String, Integer> points = new HashMap<>();
 		int anonCnt = 0;
 		for(int i = 0; i < players.size(); i++) {
-			String playerName = players.get(i).name.isBlank() ? "Anon " + (++anonCnt) : players.get(i).name;
-			points.put(playerName, players.get(i).points);
+			Player p = findPlayerById(i);
+			String playerName = p.name.isBlank() ? "Anon " + (++anonCnt) : p.name;
+			points.put(playerName, p.points);
 		}
 		
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyResults(correctImage, players.get(i).points, points);
+			Player p = findPlayerById(i);
+			p.proxy.notifyResults(correctImage, p.points, points);
 		}
 		
 		currentPlayer++;
@@ -220,32 +233,47 @@ public class GameServer {
 			
 			if(freeImages.size() < neededImages || rounds >= Settings.MAX_ROUNDS) {
 				for(int i = 0; i < players.size(); i++) {
-					players.get(i).proxy.notifyNewGamestate(GameState.STATE_GAME_OVER);
+					findPlayerById(i).proxy.notifyNewGamestate(GameState.STATE_GAME_OVER);
 				}
 				Server.addToQueue(() -> restartServer());
 				return;
 			}
 		}
 		
+		Player current = findPlayerById(currentPlayer);
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyMiscInfo(players.get(currentPlayer).name, freeImages.size(), images.size());
+			Player p = findPlayerById(i);
+			p.proxy.notifyMiscInfo(current.name, freeImages.size(), images.size());
 			
 			if(i == currentPlayer) 
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
+				p.proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR_YOU);
 			else
-				players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR);
+				p.proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CZAR);
 		}
 	}
 	
 	protected void processCzarTheme(String theme) {
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CARDS);
-			players.get(i).proxy.notifyTheme(theme);
+			Player p = findPlayerById(i);
+			p.proxy.notifyNewGamestate(GameState.STATE_WAITING_FOR_CARDS);
+			p.proxy.notifyTheme(theme);
 		}
 	}
 	
 	protected void restartServer() {
 		//Server.shouldRestart = true;
 		Server.isRunning = false;
+	}
+	
+	private Player findPlayerById(int id) {
+		Player p = null;
+		for(Player player : players.values()) {
+			if(player.playerId == id) {
+				p = player;
+				break;
+			}
+		}
+		
+		return p;
 	}
 }

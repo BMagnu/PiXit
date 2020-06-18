@@ -10,7 +10,7 @@ public class CommandSendClient implements DebugCommandHandler {
 	public String handle(String command, GameServer server) {
 		
 		Player p = null;
-		for(Player player : server.players) {
+		for(Player player : server.players.values()) {
 			if(player.playerId.equals(Integer.parseInt(command.split(" ")[0]))) {
 				p = player;
 				break;

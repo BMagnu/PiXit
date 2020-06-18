@@ -37,13 +37,15 @@ public class CommandShowState implements DebugCommandHandler {
 		string.append(server.players.size());
 		string.append("\r\n");
 		if(verbose) {
-			for(Player player : server.players) {
+			for(Entry<String, Player> player : server.players.entrySet()) {
 				string.append("\tID: ");
-				string.append(player.playerId);
+				string.append(player.getValue().playerId);
 				string.append(", Name: ");
-				string.append(player.name);
+				string.append(player.getValue().name);
 				string.append(", Points: ");
-				string.append(player.points);
+				string.append(player.getValue().points);
+				string.append(", Connection: ");
+				string.append(player.getKey());
 				string.append("\r\n");
 			}
 			string.append("\r\n");

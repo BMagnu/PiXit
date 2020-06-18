@@ -15,20 +15,34 @@ public class RegisterPlayer implements ClientMessageHandler {
 
 	@Override
 	public JsonObject handle(JsonObject data, GameServer server, ClientConnection socket) {
-		Player player = new Player();
+		String clientId = data.get("id").getAsString();
 		
-		int playerId = server.registerPlayer(player);
-		player.proxy = new ClientProxy(socket);
-		player.imageSlots = new HashMap<>();
-		player.points = 0;
-		player.name = data.get("name").getAsString();
+		Player player = server.players.get(clientId);
 		
 		JsonObject json = new JsonObject();
+		
+		if(player == null) {
+			player = new Player();
+			
+			int playerId = server.registerPlayer(player, clientId);
+			player.proxy = new ClientProxy(socket);
+			player.imageSlots = new HashMap<>();
+			player.points = 0;
+			player.name = data.get("name").getAsString();
+			
+			json.addProperty("playerId", playerId);
+		}
+		else {
+			player.proxy = new ClientProxy(socket);
+			int playerId = server.registerPlayer(player, clientId);
+			
+			json.addProperty("playerId", playerId);
+		}
+		
 		json.addProperty("success", true);
-		json.addProperty("playerId", playerId);
+
 			
 		return json;
-	
 	}
 	
 	@Override

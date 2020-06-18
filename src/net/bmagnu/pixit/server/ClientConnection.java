@@ -22,6 +22,9 @@ public class ClientConnection extends Thread {
 	}
 	
 	public synchronized void send(String toSend) {
+		if(socket.isClosed())
+			return;
+		
 		System.out.println("Sent message to " + socket.getInetAddress());
 		//System.out.println(toSend);
 		out.println(toSend);

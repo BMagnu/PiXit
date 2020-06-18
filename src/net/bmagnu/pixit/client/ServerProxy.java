@@ -157,9 +157,10 @@ public class ServerProxy {
 		throw new IllegalArgumentException("Client Error");
 	}
 	
-	public int registerPlayer(String name) {
+	public int registerPlayer(String name, String id) {
 		JsonObject request = new JsonObject();
 		request.addProperty("name", name);
+		request.addProperty("id", id);
 		
 		String json = buildJson(request, "registerPlayer");
 		
