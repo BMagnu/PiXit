@@ -8,15 +8,11 @@
 module pixit {
 
 	exports net.bmagnu.pixit.common;
-	
-	exports net.bmagnu.pixit.server.handlers;
-	
+
 	exports net.bmagnu.pixit.server;
 	
 	exports net.bmagnu.pixit.client;
-	
-	exports net.bmagnu.pixit.client.handlers;
-	
+
 	requires transitive com.google.gson;
 	
 	requires javafx.controls;

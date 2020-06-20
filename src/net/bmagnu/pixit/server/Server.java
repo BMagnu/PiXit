@@ -151,7 +151,9 @@ public class Server {
 	}
 	
 	private void initImages(String path) throws IOException {
-	
+		if (path.endsWith("\"")) // Weird shell behaviour passing the trailing " to java sometimes
+			path = path.substring(0, path.length() - 1);
+		
 		Files.walk(Paths.get(path)).filter((file) -> {
 			String mime;
 			try {
