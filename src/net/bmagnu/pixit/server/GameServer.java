@@ -28,11 +28,14 @@ public class GameServer {
 
 	public Map<Integer, Integer> currentImageGuesses = new HashMap<>(); // PlayerId | ImageId
 
+	public String lastCzarTheme = "";
+	
 	private Random rand = new Random();
 
 	public void playCzarTheme(String theme) {
 		currentImages.clear();
 
+		lastCzarTheme = theme;
 		Server.addToQueue(() -> processCzarTheme(theme));
 	}
 
@@ -130,8 +133,8 @@ public class GameServer {
 					player.proxy.notifyImages(images);
 
 				case STATE_WAITING_FOR_CARDS:
-					// TODO Save Czar Theme
 					// Round Theme
+					player.proxy.notifyTheme(lastCzarTheme);
 					break;
 				}
 			});
@@ -188,9 +191,10 @@ public class GameServer {
 		currentImageGuesses.clear();
 
 		List<PiXitImage> images = new ArrayList<>(currentImages.keySet());
-		Collections.shuffle(images);
 
 		for (int i = 0; i < players.size(); i++) {
+			Collections.shuffle(images);
+			
 			Player p = findPlayerById(i);
 
 			if (i != currentPlayer)
@@ -222,7 +226,7 @@ public class GameServer {
 
 		}
 
-		if (numCorrectGuess > Settings.MIN_CZAR_DELTA && (players.size() - numCorrectGuess) > Settings.MIN_CZAR_DELTA)
+		if (numCorrectGuess >= Settings.MIN_CZAR_DELTA && (players.size() - numCorrectGuess) >= Settings.MIN_CZAR_DELTA)
 			findPlayerById(currentPlayer).points += Settings.POINTS_GOOD_CZAR;
 
 		try {
