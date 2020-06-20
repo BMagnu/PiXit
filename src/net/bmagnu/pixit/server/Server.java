@@ -97,7 +97,7 @@ public class Server {
 		while(isRunning) {
 			Runnable task = null;
 			while((task = execute.pollFirst(1, TimeUnit.SECONDS)) != null) {
-				Thread.sleep(10);
+				Thread.sleep(100);
 				task.run();
 			}
 		}
@@ -177,7 +177,7 @@ public class Server {
 			server.images.put(imageCount, file.toFile().getAbsolutePath());
 		});
 		
-		for(Entry<Integer, String> file : server.images.entrySet()) {
+		for (Entry<Integer, String> file : server.images.entrySet()) {
 			System.out.println("Image " + file.getKey() + ": " + file.getValue());
 			System.out.println("With Hash " + server.imagesById.get(file.getKey()).hash);
 			System.out.println();

@@ -34,7 +34,7 @@ public class RegisterPlayer implements ClientMessageHandler {
 		}
 		else {
 			player.proxy = new ClientProxy(socket);
-			int playerId = server.registerPlayer(player, clientId);
+			int playerId = server.reconnectPlayer(player);
 			
 			json.addProperty("playerId", playerId);
 		}

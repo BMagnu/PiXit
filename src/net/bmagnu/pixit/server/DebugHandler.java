@@ -30,7 +30,11 @@ private static Map<String, DebugCommandHandler> handlers = new HashMap<>();
 	
 	
 	public void handleRecieveMessage(String command) {
-		String response = handlers.get(command.split(" ")[0]).handle(command.substring(command.indexOf(' ') + 1), gameserver);
+		DebugCommandHandler handler = handlers.get(command.split(" ")[0]);
+		if(handler == null)
+			return;
+		
+		String response = handler.handle(command.substring(command.indexOf(' ') + 1), gameserver);
 		out.println(response);
 	}
 	

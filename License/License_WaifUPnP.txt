@@ -58,4 +58,4 @@ If the Library as you received it specifies that a proxy can decide whether futu
 
 
 Changes Made to the Library:
-Added Java Module information for running in Java 11 and higher
+Added Java Module information for running in Java 11 and higher, added option for specifying the UPnP opening name

@@ -50,10 +50,26 @@ public class ServerConnection extends Thread {
 	public synchronized JsonObject sendWaitForResponse(String toSend) throws InterruptedException {
 		requireResponse = true;
 		send(toSend);
-		String response = messages.takeFirst();
+		String response;
+		
+		boolean badResponse = true;
+		JsonObject json;
+		
+		do {
+			response = messages.takeFirst();
+			json = (JsonObject) JsonParser.parseString(response);
+			
+			if(json.has("id") && json.has("data")) {
+				handler.handleRecieveMessage(json);
+			}
+			else
+				badResponse = false;
+			
+		} while(badResponse);
+		
 		System.out.println("Got Response");
 		requireResponse = false;
-		return (JsonObject) JsonParser.parseString(response);
+		return json;
 	}
 	
 	private void handleMessages() {

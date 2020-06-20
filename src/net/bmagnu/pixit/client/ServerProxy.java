@@ -160,7 +160,7 @@ public class ServerProxy {
 	public int registerPlayer(String name, String id) {
 		JsonObject request = new JsonObject();
 		request.addProperty("name", name);
-		request.addProperty("id", id);
+		request.addProperty("id", name + id);
 		
 		String json = buildJson(request, "registerPlayer");
 		

@@ -15,6 +15,7 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 	public void handle(JsonObject data) {
 		Integer id = data.get("state").getAsInt();
 		GameState state = GameState.deserialize(id);
+		Client.instance.state = state;
 		Map<Integer, PiXitImageRequest> images = null;
 		
 		switch (state) {
@@ -55,8 +56,6 @@ public class NotifyNewGamestate implements ServerMessageHandler {
 			case STATE_WAITING_FOR_PLAYERS:
 				throw new IllegalArgumentException();
 		}
-		
-		Client.instance.state = state;
 	}
 	
 }

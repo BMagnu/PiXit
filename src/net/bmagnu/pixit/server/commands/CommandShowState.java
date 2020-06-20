@@ -20,11 +20,7 @@ public class CommandShowState implements DebugCommandHandler {
 		string.append(" / ");
 		string.append(server.images.size());
 		string.append("\r\n");
-		
-		string.append("Gamestate: ");
-		string.append(server.gameState.name());
-		string.append("\r\n");
-		
+
 		string.append("Current Player: ");
 		string.append(server.currentPlayer);
 		string.append("\r\n");
@@ -44,6 +40,8 @@ public class CommandShowState implements DebugCommandHandler {
 				string.append(player.getValue().name);
 				string.append(", Points: ");
 				string.append(player.getValue().points);
+				string.append(", State: ");
+				string.append(player.getValue().state.name());
 				string.append(", Connection: ");
 				string.append(player.getKey());
 				string.append("\r\n");
