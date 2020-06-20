@@ -9,6 +9,6 @@
 	"pointsGotGuessed" : 1,
 	"minimumCzarDelta" : 1,
 	"postRoundWait" : 5000,
-	"portServer" : 53415,
+	"portServer" : 43415,
 	"openPortUPnP" : true
 }
