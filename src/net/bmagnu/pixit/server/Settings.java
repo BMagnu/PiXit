@@ -32,7 +32,7 @@ public class Settings {
 		//Load Config from File
 		
 		boolean ALLOW_EMPTY_THEME_Loc = false;
-		int PORT_SERVER_Loc = 53415;
+		int PORT_SERVER_Loc = 43415;
 		short NUM_PLAYERS_TO_START_Loc = 4;
 		
 		short POINTS_CORRECT_GUESS_Loc = 3;

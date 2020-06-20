@@ -77,7 +77,7 @@ public class Client extends Application {
 	}
 	
 	private void initGame(String serverIp) {
-		int port = 53415;
+		int port = 43415;
 		if(serverIp.contains(":")) {
 			port = Integer.parseInt(serverIp.split(":")[1]);
 			serverIp = serverIp.split(":")[0];
