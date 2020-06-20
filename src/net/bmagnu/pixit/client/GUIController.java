@@ -172,7 +172,7 @@ public class GUIController {
 	}
 	
 	public void setDeckStats(Integer current, Integer max) {
-		cardsLabel.setText("Cards in Deck: " + current + " / " + max);
+		cardsLabel.setText("Cards in Deck:\n" + current + " / " + max);
 	}
 	
 	public void setMainText(String text) {
